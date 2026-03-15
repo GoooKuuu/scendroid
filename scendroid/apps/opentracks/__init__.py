@@ -1,0 +1,12 @@
+"""
+Opentracks App Module
+
+Opentracks app-related evaluator (1)
+"""
+
+from scendroid.apps.registry import AppRegistry
+
+# auto-load evaluators
+from . import evaluators
+
+__all__ = ['evaluators']

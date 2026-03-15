@@ -1,0 +1,4817 @@
+{
+  "version": "1.0",
+  "description": "Layered task instructions with progressive ambiguity (L0-L3)",
+  "total_tasks": 56,
+  "levels": {
+    "L0": "Precise instruction - includes all execution-level parameters, no ambiguity",
+    "L1": "Environment-disambiguated - missing elements (e.g., app name) but only one option in context",
+    "L2": "Parameter-underspecified - clear goal but missing key information at decision points",
+    "L3": "Intent-level ambiguity - describes 'what is wanted' rather than 'what to do'"
+  },
+  "tasks": [
+    {
+      "task_id": 1,
+      "app": "Clock",
+      "category": "alarm_creation",
+      "name": "SetAlarmTomorrow",
+      "levels": {
+        "L0": {
+          "instruction": "Open the Clock app and set an alarm for 8:00 AM tomorrow.",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Clock",
+            "action": "set_alarm",
+            "time": "08:00",
+            "period": "AM",
+            "day": "tomorrow"
+          }
+        },
+        "L1": {
+          "instruction": "Set an alarm for 8:00 AM tomorrow.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "set_alarm",
+            "time": "08:00",
+            "period": "AM",
+            "day": "tomorrow"
+          }
+        },
+        "L2": {
+          "instruction": "Set an alarm for tomorrow morning.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "exact_time"
+          ],
+          "parameters": {
+            "action": "set_alarm",
+            "day": "tomorrow",
+            "period": "morning"
+          }
+        },
+        "L3": {
+          "instruction": "Remind me to wake up early tomorrow.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_name",
+            "exact_time",
+            "explicit_action"
+          ],
+          "intent": "wake_up_early",
+          "parameters": {
+            "day": "tomorrow"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "clock_alarm",
+        "method": "check_alarm_exists",
+        "expected_state": {
+          "alarm_time": "08:00",
+          "alarm_time_hour": 8,
+          "alarm_time_minute": 0,
+          "alarm_period": "AM",
+          "alarm_enabled": true,
+          "day_offset": 1
+        },
+        "androidworld_reference": "LayeredClockSetAlarm"
+      }
+    },
+    {
+      "task_id": 3,
+      "app": "Calendar",
+      "category": "meeting_creation",
+      "name": "CreateMeetingTomorrow",
+      "levels": {
+        "L0": {
+          "instruction": "Open the Calendar app and create a meeting for 10:00 AM tomorrow, location \"Building B, 3rd Floor\", duration 60 minutes.",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Calendar",
+            "action": "create_event",
+            "title": "meeting",
+            "time": "10:00",
+            "period": "AM",
+            "day": "tomorrow",
+            "location": "Building B, 3rd Floor",
+            "duration": 60,
+            "duration_unit": "minutes"
+          }
+        },
+        "L1": {
+          "instruction": "Add a meeting at 10:00 AM tomorrow to my calendar (Building B, 3rd Floor, 1 hour).",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "create_event",
+            "title": "meeting",
+            "time": "10:00",
+            "period": "AM",
+            "day": "tomorrow",
+            "location": "Building B, 3rd Floor",
+            "duration": 60,
+            "duration_unit": "minutes"
+          }
+        },
+        "L2": {
+          "instruction": "Add my 10:00 AM meeting tomorrow to the calendar.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "location",
+            "duration"
+          ],
+          "parameters": {
+            "action": "create_event",
+            "title": "meeting",
+            "time": "10:00",
+            "period": "AM",
+            "day": "tomorrow"
+          }
+        },
+        "L3": {
+          "instruction": "Schedule my meeting tomorrow morning in my calendar.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_name",
+            "exact_time",
+            "location",
+            "duration"
+          ],
+          "intent": "schedule_meeting",
+          "parameters": {
+            "action": "create_event",
+            "title": "meeting",
+            "day": "tomorrow",
+            "period": "morning"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "calendar_event",
+        "method": "check_event_exists",
+        "expected_state": {
+          "event_title": "meeting",
+          "event_time": "10:00",
+          "event_period": "AM",
+          "day_offset": 1,
+          "location": "Building B, 3rd Floor",
+          "duration_minutes": 60
+        },
+        "androidworld_reference": "LayeredCalendarCreateMeeting"
+      }
+    },
+    {
+      "task_id": 4,
+      "app": "Messages",
+      "category": "send_message",
+      "name": "TextAlexZhang",
+      "levels": {
+        "L0": {
+          "instruction": "Open the Simple SMS Messenger app and text Alex Zhang: \"I'm here.\"",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Messages",
+            "action": "send_sms",
+            "recipient": "Alex Zhang",
+            "message": "I'm here."
+          }
+        },
+        "L1": {
+          "instruction": "Text Alex Zhang: \"I'm here.\"",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "send_sms",
+            "recipient": "Alex Zhang",
+            "message": "I'm here."
+          }
+        },
+        "L2": {
+          "instruction": "Send a text saying \"I'm here.\"",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "recipient"
+          ],
+          "parameters": {
+            "action": "send_sms",
+            "message": "I'm here."
+          }
+        },
+        "L3": {
+          "instruction": "I want to let someone know that I've arrived.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_name",
+            "recipient",
+            "exact_message"
+          ],
+          "intent": "notify_arrival",
+          "parameters": {
+            "purpose": "notify_arrival"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "sms_sent",
+        "method": "check_sms_exists",
+        "expected_state": {
+          "recipient": "Alex Zhang",
+          "recipient_number": "1234567890",
+          "message_content": "I'm here.",
+          "message_sent": true
+        },
+        "androidworld_reference": "LayeredSmsSendMessage"
+      }
+    },
+    {
+      "task_id": 5,
+      "app": "Contacts",
+      "category": "contact_creation",
+      "name": "AddWilliamWang",
+      "levels": {
+        "L0": {
+          "instruction": "Open the Contacts app and create a new contact named William Wang with phone number +1 (415) 555-0138, labeled \"Work.\"",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Contacts",
+            "action": "create_contact",
+            "name": "William Wang",
+            "phone": "+1 (415) 555-0138",
+            "label": "Work"
+          }
+        },
+        "L1": {
+          "instruction": "Save a new contact: William Wang, +1 (415) 555-0138 (Work).",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "create_contact",
+            "name": "William Wang",
+            "phone": "+1 (415) 555-0138",
+            "label": "Work"
+          }
+        },
+        "L2": {
+          "instruction": "Add a new contact for me.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "name",
+            "phone",
+            "label"
+          ],
+          "parameters": {
+            "action": "create_contact"
+          }
+        },
+        "L3": {
+          "instruction": "I met a new colleague—help me save their contact information.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_name",
+            "name",
+            "phone",
+            "label",
+            "explicit_action"
+          ],
+          "intent": "save_colleague_contact",
+          "parameters": {
+            "context": "met_new_colleague"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "contact_created",
+        "method": "check_contact_exists",
+        "expected_state": {
+          "contact_name": "William Wang",
+          "phone_number": "+1 (415) 555-0138",
+          "phone_label": "Work"
+        },
+        "androidworld_reference": "LayeredContactsAddContact"
+      }
+    },
+    {
+      "task_id": 6,
+      "app": "Clock",
+      "category": "timer_start",
+      "name": "StartTimer18Min30Sec",
+      "levels": {
+        "L0": {
+          "instruction": "Open Clock, set a timer for 18 minutes and 30 seconds, and start it now.",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Clock",
+            "action": "start_timer",
+            "minutes": 18,
+            "seconds": 30,
+            "start_immediately": true
+          }
+        },
+        "L1": {
+          "instruction": "Start an 18-minute 30-second timer.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "start_timer",
+            "minutes": 18,
+            "seconds": 30,
+            "start_immediately": true
+          }
+        },
+        "L2": {
+          "instruction": "Set a timer for about 18 and a half minutes.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "exact_seconds"
+          ],
+          "parameters": {
+            "action": "start_timer",
+            "minutes": 18,
+            "approximate": true
+          }
+        },
+        "L3": {
+          "instruction": "I'm cooking—tell me when it's time.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_name",
+            "duration",
+            "explicit_action"
+          ],
+          "intent": "set_cooking_timer",
+          "parameters": {
+            "context": "cooking"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "timer_running",
+        "method": "check_timer_running",
+        "expected_state": {
+          "hours": 0,
+          "minutes": 18,
+          "seconds": 30,
+          "is_running": true
+        },
+        "androidworld_reference": "LayeredClockStartTimer"
+      }
+    },
+    {
+      "task_id": 7,
+      "app": "Clock",
+      "category": "alarm_disable_all",
+      "name": "DisableAllAlarms",
+      "levels": {
+        "L0": {
+          "instruction": "Open Clock and turn off all active alarms",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Clock",
+            "action": "disable_all_alarms",
+            "target": "all_active_alarms"
+          }
+        },
+        "L1": {
+          "instruction": "Turn off all my alarms",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "disable_all_alarms",
+            "target": "all_alarms"
+          }
+        },
+        "L3": {
+          "instruction": "I'm on vacation, I don't want to be disturbed by alarms.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_name",
+            "explicit_action",
+            "target"
+          ],
+          "intent": "avoid_alarm_disturbance",
+          "parameters": {
+            "context": "vacation",
+            "desire": "no_disturbance"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "all_alarms_disabled",
+        "method": "check_all_alarms_off",
+        "expected_state": {
+          "all_alarms_disabled": true,
+          "num_initial_alarms": 3
+        },
+        "androidworld_reference": "LayeredClockDisableAllAlarms"
+      }
+    },
+    {
+      "task_id": 8,
+      "app": "Simple Calendar Pro",
+      "category": "recurring_event_creation",
+      "name": "CreateWeeklyGymEvent",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple Calendar Pro and create a recurring event titled \"Gym\" starting next Monday at 6:30 PM, repeating weekly, lasting 90 minutes, description \"Leg day\".",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple Calendar Pro",
+            "action": "create_recurring_event",
+            "title": "Gym",
+            "start_day": "next Monday",
+            "start_time": "18:30",
+            "repeat": "weekly",
+            "duration": 90,
+            "description": "Leg day"
+          }
+        },
+        "L1": {
+          "instruction": "Set up a weekly \"Gym\" event starting next Monday at 6:30 PM for 90 minutes.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name",
+            "description"
+          ],
+          "parameters": {
+            "action": "create_recurring_event",
+            "title": "Gym",
+            "start_day": "next Monday",
+            "start_time": "18:30",
+            "repeat": "weekly",
+            "duration": 90
+          }
+        },
+        "L2": {
+          "instruction": "Add a repeating gym plan to my calendar.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "start_day",
+            "start_time",
+            "duration",
+            "repeat_frequency"
+          ],
+          "parameters": {
+            "action": "create_recurring_event",
+            "title": "gym",
+            "repeat": "repeating"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "recurring_event_created",
+        "method": "check_recurring_event_exists",
+        "expected_state": {
+          "title": "Gym",
+          "hour": 18,
+          "minute": 30,
+          "day_of_week": 1,
+          "duration_mins": 90,
+          "description": "Leg day",
+          "repeat_type": "weekly"
+        },
+        "androidworld_reference": "LayeredCalendarCreateRecurringEvent"
+      }
+    },
+    {
+      "task_id": 9,
+      "app": "Simple Calendar Pro",
+      "category": "event_deletion_by_date",
+      "name": "DeleteEventsOnOct16",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple Calendar Pro and delete all events on 2023-10-16",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple Calendar Pro",
+            "action": "delete_all_events",
+            "date": "2023-10-16"
+          }
+        },
+        "L1": {
+          "instruction": "Clear my calendar for 2023-10-16",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "clear_calendar",
+            "date": "2023-10-16"
+          }
+        },
+        "L2": {
+          "instruction": "Remove everything scheduled on 2023-10-16",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "explicit_action"
+          ],
+          "parameters": {
+            "action": "remove",
+            "target": "all_scheduled",
+            "date": "2023-10-16"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "events_deleted_on_date",
+        "method": "check_no_events_on_date",
+        "expected_state": {
+          "year": 2023,
+          "month": 10,
+          "day": 16,
+          "num_initial_events": 3
+        },
+        "androidworld_reference": "LayeredCalendarDeleteEventsOnDate"
+      }
+    },
+    {
+      "task_id": 10,
+      "app": "Simple Calendar Pro",
+      "category": "information_retrieval",
+      "name": "GetNextUpcomingEvent",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple Calendar Pro and tell me the title of my next upcoming event (title only)",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple Calendar Pro",
+            "action": "get_next_event",
+            "output": "title_only"
+          }
+        },
+        "L2": {
+          "instruction": "Check what I have coming up next",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "specific_field"
+          ],
+          "parameters": {
+            "action": "check_upcoming",
+            "target": "next_event"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "information_retrieval_answer",
+        "method": "fuzzy_match_agent_answer",
+        "expected_state": {
+          "next_event_title": "Project Review",
+          "next_event_time_hour": 16,
+          "next_event_time_minute": 0
+        },
+        "notes": "Agent answer retrieved from env.interaction_cache. Uses fuzzy matching with 90% similarity threshold.",
+        "androidworld_reference": "LayeredCalendarGetNextEvent"
+      }
+    },
+    {
+      "task_id": 11,
+      "app": "Simple Calendar Pro",
+      "category": "event_deletion_by_time",
+      "name": "DeleteEvent3PM",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple Calendar Pro and delete the event scheduled for 3:00 PM today",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple Calendar Pro",
+            "action": "delete_event",
+            "time": "3:00 PM",
+            "date": "today"
+          }
+        },
+        "L1": {
+          "instruction": "Cancel my 3:00 PM appointment",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "cancel",
+            "time": "3:00 PM"
+          }
+        },
+        "L2": {
+          "instruction": "Remove my afternoon meeting",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "specific_time"
+          ],
+          "parameters": {
+            "action": "remove",
+            "time_period": "afternoon"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "event_deleted_by_time",
+        "method": "check_event_deleted_at_time",
+        "expected_state": {
+          "target_hour": 15,
+          "target_minute": 0,
+          "target_title": "Team Meeting",
+          "num_initial_noise_events": 3
+        },
+        "androidworld_reference": "LayeredCalendarDeleteEventByTime"
+      }
+    },
+    {
+      "task_id": 12,
+      "app": "Simple Calendar Pro",
+      "category": "information_retrieval_llm",
+      "name": "CheckFreeFridayAfternoon",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple Calendar Pro and check if I have any free time on next Friday afternoon",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple Calendar Pro",
+            "action": "check_availability",
+            "day": "next Friday",
+            "time_period": "afternoon"
+          }
+        },
+        "L3": {
+          "instruction": "Am I free Friday afternoon?",
+          "clarity": "intent_level",
+          "missing": [
+            "app_name",
+            "specific_day",
+            "explicit_action"
+          ],
+          "intent": "check_availability",
+          "parameters": {
+            "context": "friday_afternoon"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "information_retrieval_llm_assisted",
+        "method": "llm_evaluate_semantic_answer",
+        "expected_state": {
+          "has_free_time": false,
+          "num_events": 3,
+          "expected_answer": "No, you don't have free time",
+          "time_period": "afternoon",
+          "target_day": "Friday"
+        },
+        "notes": "Answer evaluated using LLM for semantic matching. Agent answer retrieved from env.interaction_cache.",
+        "androidworld_reference": "LayeredCalendarCheckFreeFriday"
+      }
+    },
+    {
+      "task_id": 13,
+      "app": "Simple SMS Messenger",
+      "category": "send_message",
+      "name": "TextAliceLate",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple SMS Messenger, Send a message to 'Alice' saying 'I will be late'",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple SMS Messenger",
+            "action": "send_sms",
+            "recipient": "Alice",
+            "message": "I will be late"
+          }
+        },
+        "L1": {
+          "instruction": "Text Alice I'll be late",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "send_sms",
+            "recipient": "Alice",
+            "message": "I'll be late"
+          }
+        },
+        "L2": {
+          "instruction": "Message Alice",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "message_content"
+          ],
+          "parameters": {
+            "action": "send_sms",
+            "recipient": "Alice"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "sms_sent",
+        "method": "check_sms_exists",
+        "expected_state": {
+          "recipient": "Alice",
+          "recipient_number": "5551234567",
+          "message_content": "I will be late",
+          "message_sent": true
+        },
+        "androidworld_reference": "LayeredSmsSendMessage"
+      }
+    },
+    {
+      "task_id": 14,
+      "app": "Simple SMS Messenger",
+      "category": "reply_message",
+      "name": "ReplyMostRecentMessage",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple SMS Messenger and reply to the most recent message with: \"Sounds good, see you then.\"",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple SMS Messenger",
+            "action": "reply_sms",
+            "target": "most_recent",
+            "message": "Sounds good, see you then."
+          }
+        },
+        "L1": {
+          "instruction": "Reply to my latest text: \"Sounds good, see you then.\"",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "reply_sms",
+            "target": "most_recent",
+            "message": "Sounds good, see you then."
+          }
+        },
+        "L2": {
+          "instruction": "Respond to the last message I got.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "message_content"
+          ],
+          "parameters": {
+            "action": "reply_sms",
+            "target": "most_recent"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "sms_reply_most_recent",
+        "method": "check_reply_sent",
+        "expected_state": {
+          "sender_number": "5559876543",
+          "reply_message": "Sounds good, see you then.",
+          "message_sent": true
+        },
+        "androidworld_reference": "LayeredSmsReplyMostRecent"
+      }
+    },
+    {
+      "task_id": 15,
+      "app": "Simple SMS Messenger",
+      "category": "delete_messages",
+      "name": "DeleteBankAlertMessages",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple SMS Messenger, Delete all messages from 'BankAlert' (5552638265)",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Simple SMS Messenger",
+            "action": "delete_messages",
+            "sender": "BankAlert",
+            "sender_number": "5552638265"
+          }
+        },
+        "L1": {
+          "instruction": "Clear BankAlert messages",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "delete_messages",
+            "sender": "BankAlert"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "sms_deleted_from_sender",
+        "method": "check_messages_deleted",
+        "expected_state": {
+          "sender_name": "BankAlert",
+          "sender_number": "5552638265",
+          "num_target_messages": 3,
+          "num_noise_messages": 2,
+          "all_target_deleted": true,
+          "noise_messages_intact": true
+        },
+        "androidworld_reference": "LayeredSmsDeleteMessagesFromSender"
+      }
+    },
+    {
+      "task_id": 16,
+      "app": "Camera",
+      "category": "take_photo",
+      "name": "TakePhoto",
+      "levels": {
+        "L0": {
+          "instruction": "Open Camera, switch to Photo mode, take one photo",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Camera",
+            "action": "take_photo",
+            "mode": "photo"
+          }
+        },
+        "L1": {
+          "instruction": "Take a photo.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name",
+            "mode"
+          ],
+          "parameters": {
+            "action": "take_photo"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "photo_taken",
+        "method": "check_new_photo",
+        "expected_state": {
+          "num_new_photos": 1
+        },
+        "androidworld_reference": "LayeredCameraTakePhoto"
+      }
+    },
+    {
+      "task_id": 17,
+      "app": "Camera",
+      "category": "take_video",
+      "name": "TakeVideo",
+      "levels": {
+        "L0": {
+          "instruction": "Open Camera, switch to Video mode, record a video, then stop",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Camera",
+            "action": "take_video",
+            "mode": "video"
+          }
+        },
+        "L1": {
+          "instruction": "Take a video",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name",
+            "mode"
+          ],
+          "parameters": {
+            "action": "take_video"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "video_taken",
+        "method": "check_new_video",
+        "expected_state": {
+          "num_new_videos": 1
+        },
+        "androidworld_reference": "LayeredCameraTakeVideo"
+      }
+    },
+    {
+      "task_id": 18,
+      "app": "Audio Recorder",
+      "category": "record_audio",
+      "name": "RecordAudio",
+      "levels": {
+        "L0": {
+          "instruction": "Open Audio Recorder, record an audio clip, and save it",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Audio Recorder",
+            "action": "record_audio"
+          }
+        },
+        "L1": {
+          "instruction": "Record an audio clip and save it",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "record_audio"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "audio_recorded",
+        "method": "check_new_audio",
+        "expected_state": {
+          "num_new_recordings": 1
+        },
+        "androidworld_reference": "LayeredAudioRecorderRecordAudio"
+      }
+    },
+    {
+      "task_id": 19,
+      "app": "Files",
+      "category": "delete_file",
+      "name": "DeleteDownloadedFile",
+      "levels": {
+        "L0": {
+          "instruction": "Open Files, go to Downloads, and delete the file named \"report.pdf\".",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Files",
+            "action": "delete_file",
+            "location": "Downloads",
+            "file_name": "report.pdf"
+          }
+        },
+        "L1": {
+          "instruction": "Delete \"report.pdf\" from Downloads.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "delete_file",
+            "location": "Downloads",
+            "file_name": "report.pdf"
+          }
+        },
+        "L2": {
+          "instruction": "Delete that report file I downloaded",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "exact_file_name"
+          ],
+          "parameters": {
+            "action": "delete_file",
+            "file_type": "report"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "file_deleted",
+        "method": "check_file_deleted",
+        "expected_state": {
+          "file_name": "report.pdf",
+          "subfolder": "Download",
+          "file_deleted": true,
+          "noise_candidates": [
+            "setup_exe.exe",
+            "sample_pdf.pdf",
+            "test_download.zip",
+            "image_file.png",
+            "movie_trailer.mp4",
+            "software_patch.exe",
+            "ebook_reader.apk",
+            "music_album.zip"
+          ]
+        },
+        "androidworld_reference": "LayeredFilesDeleteFile"
+      }
+    },
+    {
+      "task_id": 20,
+      "app": "Markor",
+      "category": "create_note",
+      "name": "CreateGroceryList",
+      "levels": {
+        "L0": {
+          "instruction": "Open Markor, create a note named \"grocery_list.md\" with the text: \"Milk\\nEggs\\nRice\"",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Markor",
+            "action": "create_note",
+            "file_name": "grocery_list.md",
+            "content": "Milk\\nEggs\\nRice"
+          }
+        },
+        "L1": {
+          "instruction": "Create a Markor note \"grocery_list.md\" with my grocery items",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "create_note",
+            "file_name": "grocery_list.md",
+            "content_type": "grocery_items"
+          }
+        },
+        "L2": {
+          "instruction": "Make a grocery list note for me",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "file_name",
+            "exact_content"
+          ],
+          "parameters": {
+            "action": "create_note",
+            "type": "grocery_list"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "note_created",
+        "method": "check_note_exists",
+        "expected_state": {
+          "file_name": "grocery_list.md",
+          "text": "Milk\nEggs\nRice"
+        },
+        "androidworld_reference": "LayeredMarkorCreateNote"
+      }
+    },
+    {
+      "task_id": 21,
+      "app": "Pro Expense",
+      "category": "add_expense",
+      "name": "AddLunchExpense",
+      "levels": {
+        "L0": {
+          "instruction": "Open the expense app and add this expense: \"Lunch\", $12.80, category \"Food\", date 2023-10-15",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Pro Expense",
+            "action": "add_expense",
+            "name": "Lunch",
+            "amount": 12.8,
+            "category": "Food",
+            "date": "2023-10-15"
+          }
+        },
+        "L1": {
+          "instruction": "Add an expense: Lunch, $12.80 (Food) today.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "add_expense",
+            "name": "Lunch",
+            "amount": 12.8,
+            "category": "Food"
+          }
+        },
+        "L2": {
+          "instruction": "Log my lunch expense",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "exact_amount"
+          ],
+          "parameters": {
+            "action": "add_expense",
+            "type": "lunch"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "evaluation": {
+        "type": "expense_added",
+        "method": "check_expense_exists",
+        "expected_state": {
+          "name": "Lunch",
+          "amount": 12.8,
+          "category": "Food",
+          "date": "2023-10-15"
+        },
+        "androidworld_reference": "LayeredExpenseAddSingle"
+      }
+    },
+    {
+      "task_id": 22,
+      "app": "OpenTracks",
+      "category": "count_activities",
+      "name": "CountRunningActivities",
+      "levels": {
+        "L0": {
+          "instruction": "In OpenTracks, tell me how many \"Running\" activities I did this week (single integer)",
+          "clarity": "precise",
+          "parameters": {
+            "app": "OpenTracks",
+            "action": "count_activities",
+            "category": "Running",
+            "time_period": "this week"
+          }
+        },
+        "L1": {
+          "instruction": "How many runs did I do this week? (number only)",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "count_activities",
+            "category": "runs",
+            "time_period": "this week"
+          }
+        },
+        "L2": {
+          "instruction": "Count my runs this week",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_name",
+            "exact_category"
+          ],
+          "parameters": {
+            "action": "count_activities",
+            "activity_type": "running"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "opentracks_count",
+        "method": "check_count_answer",
+        "expected_state": {
+          "category": "running",
+          "expected_count": 5
+        },
+        "androidworld_reference": "LayeredOpenTracksCountActivities"
+      }
+    },
+    {
+      "task_id": 23,
+      "app": "OpenTracks",
+      "category": "list_activities",
+      "name": "ListActivitiesOnDate",
+      "levels": {
+        "L0": {
+          "instruction": "In OpenTracks, list the activity categories I did two days ago (categories only)",
+          "clarity": "precise",
+          "parameters": {
+            "app": "OpenTracks",
+            "action": "list_categories",
+            "date": "2023-10-13"
+          }
+        },
+        "L1": {
+          "instruction": "What activities did I do two days ago? (categories only)",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "list_categories",
+            "date": "2023-10-13"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "opentracks_list_categories",
+        "method": "check_categories_answer",
+        "expected_state": {
+          "target_date": "2023-10-13",
+          "categories": [
+            "Running",
+            "Cycling"
+          ]
+        },
+        "androidworld_reference": "LayeredOpenTracksListCategories"
+      }
+    },
+    {
+      "task_id": 24,
+      "app": "OpenTracks",
+      "category": "get_duration",
+      "name": "GetCyclingDuration",
+      "levels": {
+        "L0": {
+          "instruction": "In OpenTracks, give the duration in minutes of my \"Cycling\" activity three days ago (single integer).",
+          "clarity": "precise",
+          "parameters": {
+            "app": "OpenTracks",
+            "action": "get_duration",
+            "category": "Cycling",
+            "date": "2023-10-12"
+          }
+        },
+        "L1": {
+          "instruction": "How long was my cycling three days ago? (minutes only)",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_name"
+          ],
+          "parameters": {
+            "action": "get_duration",
+            "category": "cycling",
+            "date": "2023-10-12"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "opentracks_duration",
+        "method": "check_duration_answer",
+        "expected_state": {
+          "category": "cycling",
+          "target_date": "2023-10-12",
+          "duration_minutes": 45
+        },
+        "androidworld_reference": "LayeredOpenTracksGetDuration"
+      }
+    },
+    {
+      "task_id": 25,
+      "app": "Shopping",
+      "category": "product_search",
+      "name": "SearchDentempNightGuard",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, search the \"Dentemp Ora-GUARD Bruxism Night Guard (Two Pack)\" and open its product page",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "search_and_open",
+            "product_name": "Dentemp Ora-GUARD Bruxism Night Guard (Two Pack)",
+            "target_url": "__SHOPPING__/dentemp-ora-guard-custom-fit-dental-guard-bruxism-night-guard-for-teeth-grinding-two-pack-mouth-guard-for-clenching-teeth-at-night-mouth-guard-for-sleeping-relieve-soreness-in-jaw-muscles.html"
+          }
+        },
+        "L1": {
+          "instruction": "Find \"Dentemp Ora-GUARD Bruxism Night Guard (Two Pack)\".",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "explicit_action"
+          ],
+          "parameters": {
+            "action": "find",
+            "product_name": "Dentemp Ora-GUARD Bruxism Night Guard (Two Pack)"
+          }
+        },
+        "L2": {
+          "instruction": "Help me find a Bruxism Night Guard.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "exact_product_name",
+            "specific_brand"
+          ],
+          "parameters": {
+            "action": "find",
+            "product_type": "Bruxism Night Guard"
+          }
+        },
+        "L3": {
+          "instruction": "I have jaw bruxism problem, show me something that could alleviate the problem",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "product_type",
+            "exact_product_name"
+          ],
+          "intent": "find_bruxism_solution",
+          "parameters": {
+            "problem": "jaw bruxism"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "url_match",
+        "method": "check_url_match",
+        "expected_state": {
+          "reference_url": "__SHOPPING__/dentemp-ora-guard-custom-fit-dental-guard-bruxism-night-guard-for-teeth-grinding-two-pack-mouth-guard-for-clenching-teeth-at-night-mouth-guard-for-sleeping-relieve-soreness-in-jaw-muscles.html"
+        },
+        "webarena_task_id": 25,
+        "start_url": "__SHOPPING__",
+        "require_login": false,
+        "androidworld_reference": "LayeredShoppingSearchProduct"
+      }
+    },
+    {
+      "task_id": 26,
+      "app": "Shopping",
+      "category": "product_search",
+      "name": "FindGameCardStorage",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find the \"HEIYING Game Card Storage with 24 Game Card Slots (Black)\" and open its product page.",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "find_and_open",
+            "product_name": "HEIYING Game Card Storage with 24 Game Card Slots (Black)",
+            "target_url": "__SHOPPING__/heiying-game-card-case-for-nintendo-switch-switch-oled-game-card-or-micro-sd-memory-cards-portable-switch-game-memory-card-storage-with-24-game-card-slots-and-24-micro-sd-card-slots-black.html"
+          }
+        },
+        "L1": {
+          "instruction": "Find the HEIYING Game Card Storage with 24 slots.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "exact_product_name"
+          ],
+          "parameters": {
+            "action": "find",
+            "brand": "HEIYING",
+            "product_type": "Game Card Storage",
+            "capacity": "24 slots"
+          }
+        },
+        "L2": {
+          "instruction": "I have a lot of Nintendo Switch game cards now, help me find the best storage option to fit all 11 cards",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "specific_brand",
+            "exact_capacity"
+          ],
+          "parameters": {
+            "action": "find",
+            "product_type": "game card storage",
+            "platform": "Nintendo Switch",
+            "min_capacity": 11
+          }
+        },
+        "L3": {
+          "instruction": "I have a lot of Nintendo Switch game cards now, help me find the best storage option.",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "specific_brand",
+            "exact_capacity",
+            "quantity"
+          ],
+          "intent": "find_game_card_storage",
+          "parameters": {
+            "platform": "Nintendo Switch",
+            "need": "storage"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "url_match",
+        "method": "check_url_match",
+        "expected_state": {
+          "reference_url": "__SHOPPING__/heiying-game-card-case-for-nintendo-switch-switch-oled-game-card-or-micro-sd-memory-cards-portable-switch-game-memory-card-storage-with-24-game-card-slots-and-24-micro-sd-card-slots-black.html"
+        },
+        "webarena_task_id": 26,
+        "start_url": "__SHOPPING__",
+        "require_login": false,
+        "androidworld_reference": "LayeredShoppingFindProduct"
+      }
+    },
+    {
+      "task_id": 27,
+      "app": "Shopping",
+      "category": "category_navigation",
+      "name": "MostExpensiveSkinCare",
+      "levels": {
+        "L0": {
+          "instruction": "Go to the \"Skin Care\" category, sort all products by price from high to low, and open the most expensive one",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "navigate_sort_open",
+            "category": "Skin Care",
+            "sort_by": "price_high_to_low",
+            "select": "most_expensive",
+            "target_url": "__SHOPPING__/professional-medi-spa-scar-stretch-mark-reduction-system.html"
+          }
+        },
+        "L1": {
+          "instruction": "Show me the most expensive product from the Skin Care category",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "sorting_instruction"
+          ],
+          "parameters": {
+            "action": "show",
+            "category": "Skin Care",
+            "filter": "most_expensive"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "url_match",
+        "method": "check_url_match",
+        "expected_state": {
+          "reference_url": "__SHOPPING__/professional-medi-spa-scar-stretch-mark-reduction-system.html"
+        },
+        "webarena_task_id": 27,
+        "start_url": "__SHOPPING__",
+        "require_login": false,
+        "androidworld_reference": "LayeredShoppingCategorySort"
+      }
+    },
+    {
+      "task_id": 28,
+      "app": "Shopping",
+      "category": "category_filter",
+      "name": "FilterMensClothing",
+      "levels": {
+        "L0": {
+          "instruction": "Navigate to the Men's Clothing category and filter the results to show items within the $0-$100 price range",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "navigate_and_filter",
+            "category": "Men's Clothing",
+            "price_range": "$0-$100",
+            "target_url": "__SHOPPING__/clothing-shoes-jewelry/men/clothing.html?price=0-100"
+          }
+        },
+        "L1": {
+          "instruction": "Show me men's clothing category, $0-$100",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context"
+          ],
+          "parameters": {
+            "action": "show",
+            "category": "men's clothing",
+            "price_range": "$0-$100"
+          }
+        },
+        "L2": {
+          "instruction": "I'm looking for some clothes for men, but I'm on a budget.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "exact_price_range",
+            "specific_category"
+          ],
+          "parameters": {
+            "action": "find",
+            "category": "men's clothes",
+            "constraint": "budget"
+          }
+        },
+        "L3": {
+          "instruction": "I need a new outfit for myself for an upcoming event, but I can't spend too much money right now",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "gender",
+            "exact_price_range",
+            "specific_category"
+          ],
+          "intent": "find_affordable_outfit",
+          "parameters": {
+            "need": "new outfit",
+            "constraint": "limited_budget"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "url_match",
+        "method": "check_url_match",
+        "expected_state": {
+          "reference_url": "__SHOPPING__/clothing-shoes-jewelry/men/clothing.html?price=0-100"
+        },
+        "webarena_task_id": 28,
+        "start_url": "__SHOPPING__",
+        "require_login": false,
+        "androidworld_reference": "LayeredShoppingCategoryFilter"
+      }
+    },
+    {
+      "task_id": 29,
+      "app": "Shopping",
+      "category": "product_search",
+      "name": "SearchTidePods",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, search for \"Tide PODS Spring Meadow Scent HE Turbo Laundry Detergent Pacs, 81 Count\" and open its product page",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "search_and_open",
+            "product_name": "Tide PODS Spring Meadow Scent HE Turbo Laundry Detergent Pacs, 81 Count",
+            "target_url": "__SHOPPING__/tide-pods-spring-meadow-scent-he-turbo-laundry-detergent-pacs-81-count.html"
+          }
+        },
+        "L1": {
+          "instruction": "Find \"Tide PODS Spring Meadow Scent, 81 Count\".",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "full_product_name"
+          ],
+          "parameters": {
+            "action": "find",
+            "brand": "Tide PODS",
+            "scent": "Spring Meadow",
+            "count": "81"
+          }
+        },
+        "L2": {
+          "instruction": "I need to buy some Tide laundry pods in a large pack",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "exact_count",
+            "specific_scent"
+          ],
+          "parameters": {
+            "action": "buy",
+            "brand": "Tide",
+            "product_type": "laundry pods",
+            "size": "large pack"
+          }
+        },
+        "L3": {
+          "instruction": "I'm running low on laundry detergent and I prefer the pods; help me find my favorite one",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "exact_product",
+            "size"
+          ],
+          "intent": "replenish_laundry_detergent",
+          "parameters": {
+            "need": "laundry detergent",
+            "preference": "pods"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "url_match",
+        "method": "check_url_match",
+        "expected_state": {
+          "reference_url": "__SHOPPING__/tide-pods-spring-meadow-scent-he-turbo-laundry-detergent-pacs-81-count.html"
+        },
+        "webarena_task_id": 29,
+        "start_url": "__SHOPPING__",
+        "require_login": false,
+        "androidworld_reference": "LayeredShoppingSearchProduct"
+      }
+    },
+    {
+      "task_id": 30,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddIPhone11ProToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find the \"Apple iPhone 11 Pro, US Version, 256GB, Silver\" and add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "Apple iPhone 11 Pro, US Version, 256GB, Silver"
+          }
+        },
+        "L1": {
+          "instruction": "Find the iPhone 11 Pro 256GB in Silver and add it to my cart.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "iPhone 11 Pro 256GB Silver"
+          }
+        },
+        "L2": {
+          "instruction": "I want to buy an iPhone 11 Pro, can you add the 256GB version to my cart?",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "color"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_type": "iPhone 11 Pro",
+            "storage": "256GB"
+          }
+        },
+        "L3": {
+          "instruction": "I want to buy an iPhone 11 Pro, add to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "storage",
+            "color"
+          ],
+          "intent": "buy_iphone_11_pro",
+          "parameters": {
+            "product_type": "iPhone 11 Pro"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "iPhone 11 Pro |AND| 256GB |AND| Silver"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 30,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 31,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddMineralogieLipGlossToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"Mineralogie All Natural Lip Gloss\", select Color: Jasmine, then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "Mineralogie All Natural Lip Gloss",
+            "color": "Jasmine"
+          }
+        },
+        "L1": {
+          "instruction": "Add Mineralogie All Natural Lip Gloss — Lip Gloss to my cart.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "color_specification"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Mineralogie All Natural Lip Gloss"
+          }
+        },
+        "L2": {
+          "instruction": "Add Mineralogie All Natural Lip Gloss to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "color"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Mineralogie All Natural Lip Gloss"
+          }
+        },
+        "L3": {
+          "instruction": "I want a natural lip gloss—add it to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "specific_product",
+            "color"
+          ],
+          "intent": "buy_natural_lip_gloss",
+          "parameters": {
+            "product_type": "natural lip gloss"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "Mineralogie |AND| Lip Gloss |AND| Jasmine"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 31,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 32,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddSandgrensClogs ToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"Sandgrens Swedish Handmade Wooden Clog Sandal | Copenhagen\", select Size: 8–8.5, then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "Sandgrens Swedish Handmade Wooden Clog Sandal | Copenhagen",
+            "size": "8–8.5"
+          }
+        },
+        "L1": {
+          "instruction": "Add Sandgrens Copenhagen clogs, size 8–8.5 to my cart",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "full_product_name"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Sandgrens Copenhagen clogs",
+            "size": "8–8.5"
+          }
+        },
+        "L2": {
+          "instruction": "Add Sandgrens Copenhagen clogs to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "size"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Sandgrens Copenhagen clogs"
+          }
+        },
+        "L3": {
+          "instruction": "I'm looking for Swedish wooden clogs—help me pick the good style and a size, then add to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "exact_size"
+          ],
+          "intent": "buy_swedish_wooden_clogs_copenhagen_style",
+          "parameters": {
+            "product_type": "Swedish wooden clogs",
+            "style_hint": "Copenhagen"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "Sandgrens |AND| Copenhagen |AND| 8"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 32,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 33,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddVanGoghSunflowerToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"Wieco Art Sunflower by Vincent Van Gogh\", select Size: 12×16 inch (Framed), then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "Wieco Art Sunflower by Vincent Van Gogh",
+            "size": "12×16 inch (Framed)"
+          }
+        },
+        "L1": {
+          "instruction": "Add Wieco Art Sunflower (Van Gogh), 12×16 framed to my cart",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Wieco Art Sunflower Van Gogh",
+            "size": "12×16 framed"
+          }
+        },
+        "L2": {
+          "instruction": "Add Wieco Art Sunflower (Van Gogh) to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "exact_product_name"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Wieco Art Sunflower Van Gogh",
+            "size_preference": "12×16",
+            "frame_preference": "framed"
+          }
+        },
+        "L3": {
+          "instruction": "I want a Van Gogh sunflower wall art—help me choose a size/frame option and add it to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "exact_size"
+          ],
+          "intent": "buy_van_gogh_sunflower_art_framed",
+          "parameters": {
+            "product_type": "Van Gogh sunflower wall art",
+            "frame_preference": "framed"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "Wieco Art |AND| Sunflower |AND| Van Gogh |AND| 12 |AND| 16 |AND| Framed"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 33,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 34,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddFileCabinetToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"2 Drawer Lateral File Cabinet with Lock\", choose Color: White and Variant: 3 Drawer, then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "2 Drawer Lateral File Cabinet with Lock",
+            "color": "White",
+            "variant": "3 Drawer"
+          }
+        },
+        "L1": {
+          "instruction": "Add the white 3-drawer locking lateral file cabinet to my cart",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "exact_product_name"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "color": "White",
+            "variant": "3-drawer locking lateral file cabinet"
+          }
+        },
+        "L2": {
+          "instruction": "Add the locking lateral file cabinet to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "color",
+            "drawer_count"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_type": "locking lateral file cabinet"
+          }
+        },
+        "L3": {
+          "instruction": "I need a lockable file cabinet for home/office—help me pick one and add it to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "specific_type",
+            "color",
+            "size"
+          ],
+          "intent": "buy_lockable_file_cabinet",
+          "parameters": {
+            "product_type": "lockable file cabinet"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "Lateral File Cabinet |AND| Lock |AND| White |AND| 3 Drawer"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 34,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 35,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddBathroomVanityLightToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"ELUZE 4-Light Bathroom Vanity Light (Black, Clear Glass Shades)\", select Size: 31.1 Inch — 4 Lights, then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "ELUZE 4-Light Bathroom Vanity Light (Black, Clear Glass Shades)",
+            "size": "31.1 Inch — 4 Lights"
+          }
+        },
+        "L1": {
+          "instruction": "Add ELUZE bathroom vanity light, 4 lights (31.1 inch) to my cart",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "full_product_name"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "ELUZE bathroom vanity light",
+            "size": "31.1 inch, 4 lights"
+          }
+        },
+        "L2": {
+          "instruction": "Add an ELUZE bathroom vanity light to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "size",
+            "light_count"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "ELUZE bathroom vanity light"
+          }
+        },
+        "L3": {
+          "instruction": "I'm upgrading my bathroom lighting—help me pick a vanity light and add it to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "size",
+            "style"
+          ],
+          "intent": "buy_bathroom_vanity_light",
+          "parameters": {
+            "product_type": "bathroom vanity light"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "ELUZE |AND| Bathroom Vanity Light |AND| 4 Light |AND| 31"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 35,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 36,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddEnergizerBatteriesToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"Energizer MAX C Batteries\", choose Style: C 8 Count, then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "Energizer MAX C Batteries",
+            "style": "C 8 Count"
+          }
+        },
+        "L1": {
+          "instruction": "Add Energizer MAX C batteries (8-count) to my cart.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Energizer MAX C batteries",
+            "count": "8"
+          }
+        },
+        "L2": {
+          "instruction": "Add Energizer MAX C batteries to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "count"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Energizer MAX C batteries"
+          }
+        },
+        "L3": {
+          "instruction": "I need C batteries—help me choose a good pack and add it to my cart.",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "count"
+          ],
+          "intent": "buy_c_batteries",
+          "parameters": {
+            "product_type": "C batteries"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "Energizer |AND| MAX |AND| C Batteries |AND| 8"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 36,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 37,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddOutdoorFoldingTableToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"Outdoor Patio Folding Side Table (Square Metal End Table)\", choose Color: White, then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "Outdoor Patio Folding Side Table (Square Metal End Table)",
+            "color": "White"
+          }
+        },
+        "L1": {
+          "instruction": "Add the white outdoor folding side table to my cart",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "exact_product_name"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_type": "outdoor folding side table",
+            "color": "White"
+          }
+        },
+        "L2": {
+          "instruction": "Add the outdoor folding side table to my cart.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "color"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_type": "outdoor folding side table"
+          }
+        },
+        "L3": {
+          "instruction": "I want a small outdoor side table—help me pick one and add it to my cart.",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "specific_type",
+            "color",
+            "style"
+          ],
+          "intent": "buy_outdoor_side_table",
+          "parameters": {
+            "product_type": "outdoor side table"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "Outdoor |AND| Folding |AND| Side Table |AND| White"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 37,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 38,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddSanDiskUSBDriveToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"SanDisk Cruzer Glide USB 2.0 Flash Drive\", choose Capacity: 64GB and Pack: 2-pack, then add it to my cart.",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "SanDisk Cruzer Glide USB 2.0 Flash Drive",
+            "capacity": "64GB",
+            "pack": "2-pack"
+          }
+        },
+        "L1": {
+          "instruction": "Add SanDisk Cruzer Glide USB drive, 64GB (2-pack) to my cart",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "SanDisk Cruzer Glide USB drive",
+            "capacity": "64GB",
+            "pack": "2-pack"
+          }
+        },
+        "L2": {
+          "instruction": "Add a SanDisk Cruzer Glide USB drive to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "capacity",
+            "pack_size"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "SanDisk Cruzer Glide USB drive"
+          }
+        },
+        "L3": {
+          "instruction": "I need a USB flash drive—help me choose a good capacity and add it to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "model",
+            "capacity"
+          ],
+          "intent": "buy_usb_flash_drive",
+          "parameters": {
+            "product_type": "USB flash drive"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "SanDisk |AND| Cruzer Glide |AND| USB |AND| 64GB |AND| 2"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 38,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 39,
+      "app": "Shopping",
+      "category": "add_to_cart",
+      "name": "AddChallahBreadToCart",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find \"Greens Egg Challah Bread\", choose Size: 3 Pack, then add it to my cart",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "action": "add_to_cart",
+            "product_name": "Greens Egg Challah Bread",
+            "size": "3 Pack"
+          }
+        },
+        "L1": {
+          "instruction": "Add Greens Egg Challah Bread (3-pack) to my cart",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Greens Egg Challah Bread",
+            "size": "3-pack"
+          }
+        },
+        "L2": {
+          "instruction": "Add Greens Egg Challah Bread to my cart",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "pack_size"
+          ],
+          "parameters": {
+            "action": "add_to_cart",
+            "product_name": "Greens Egg Challah Bread"
+          }
+        },
+        "L3": {
+          "instruction": "I want some challah bread—help me pick an option and add it to my cart",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "brand",
+            "pack_size"
+          ],
+          "intent": "buy_challah_bread",
+          "parameters": {
+            "product_type": "challah bread"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "program_html",
+        "method": "check_cart_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "expected_state": {
+          "program_html": [
+            {
+              "url": "__SHOPPING__/checkout/cart",
+              "locator": "",
+              "required_contents": {
+                "must_include": [
+                  "Greens |AND| Challah Bread |AND| 3 Pack"
+                ]
+              }
+            }
+          ]
+        },
+        "webarena_task_id": 39,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "androidworld_reference": "LayeredShoppingAddToCart"
+      }
+    },
+    {
+      "task_id": 40,
+      "app": "Calendar+SimpleSMSMessenger",
+      "category": "cross_app_meeting_notification",
+      "name": "NotifyMeetingAttendees",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple Calendar Pro and check the 11:00 meeting today to find the attendees (listed in the description). Then open Simple SMS Messenger and text each attendee to remind them: include the meeting time (11:00), location, and the word 'meeting'.",
+          "clarity": "precise",
+          "parameters": {
+            "apps": [
+              "Simple Calendar Pro",
+              "Simple SMS Messenger"
+            ],
+            "action": "query_and_notify",
+            "meeting_time": "11:00",
+            "meeting_day": "today",
+            "required_message_keywords": [
+              "11:00",
+              "location_name",
+              "meeting"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Check my 11:00 meeting today and text all attendees a reminder with the time and location.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_names",
+            "exact_message_format"
+          ],
+          "parameters": {
+            "action": "query_and_notify",
+            "meeting_time": "11:00",
+            "meeting_day": "today",
+            "reminder_content": [
+              "time",
+              "location"
+            ]
+          }
+        },
+        "L2": {
+          "instruction": "Send a reminder to everyone in my 11:00 meeting.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_names",
+            "meeting_day",
+            "reminder_details"
+          ],
+          "parameters": {
+            "action": "send_meeting_reminder",
+            "meeting_time": "11:00"
+          }
+        },
+        "L3": {
+          "instruction": "I have a meeting soon—let everyone know about it.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_names",
+            "meeting_time",
+            "meeting_day",
+            "reminder_details"
+          ],
+          "intent": "notify_meeting_attendees",
+          "parameters": {
+            "action": "notify_attendees"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "cross_app_sms_meeting",
+        "method": "check_meeting_notifications",
+        "expected_state": {
+          "meeting_hour": 11,
+          "meeting_minute": 0,
+          "meeting_location": "Conference Room A",
+          "attendees": [
+            {
+              "name": "David Miller",
+              "number": "5551234001"
+            },
+            {
+              "name": "Emily Chen",
+              "number": "5551234002"
+            },
+            {
+              "name": "Frank Wilson",
+              "number": "5551234003"
+            }
+          ],
+          "distractor_contacts": [
+            {
+              "name": "Grace Lee",
+              "number": "5551234004"
+            },
+            {
+              "name": "Henry Zhang",
+              "number": "5551234005"
+            }
+          ],
+          "other_meetings": [
+            {
+              "title": "Team Standup",
+              "hour": 9,
+              "minute": 0,
+              "location": "Room B"
+            },
+            {
+              "title": "Project Review",
+              "hour": 14,
+              "minute": 30,
+              "location": "Room C"
+            }
+          ],
+          "required_keywords": [
+            "11:00",
+            "Conference Room A",
+            "meeting"
+          ],
+          "all_attendees_notified": true,
+          "no_distractor_notified": false
+        },
+        "androidworld_reference": "LayeredCrossAppMeetingNotification"
+      }
+    },
+    {
+      "task_id": 41,
+      "app": "Calendar+SimpleSMSMessenger",
+      "category": "cross_app_meeting_update_notify",
+      "name": "UpdateMeetingLocationAndNotify",
+      "levels": {
+        "L0": {
+          "instruction": "Open Simple Calendar Pro and change the location of today's 15:30 meeting to 'Room 405'. Then open Simple SMS Messenger and text each attendee to inform them.",
+          "clarity": "precise",
+          "parameters": {
+            "apps": [
+              "Simple Calendar Pro",
+              "Simple SMS Messenger"
+            ],
+            "action": "update_and_notify",
+            "meeting_time": "15:30",
+            "meeting_day": "today",
+            "old_location": "Room 302",
+            "new_location": "Room 405",
+            "required_message_keywords": [
+              "Room 405",
+              "15:30",
+              "location"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Change the 15:30 meeting location to Room 405 and notify all attendees about the location change.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "app_names",
+            "meeting_title",
+            "how_to_find_attendees"
+          ],
+          "parameters": {
+            "action": "update_and_notify",
+            "meeting_time": "15:30",
+            "new_location": "Room 405",
+            "notify_content": [
+              "location_change",
+              "time"
+            ]
+          }
+        },
+        "L2": {
+          "instruction": "The 3:30 PM meeting location needs to change to Room 405—update it and let everyone know.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_names",
+            "meeting_day",
+            "meeting_title",
+            "old_location"
+          ],
+          "parameters": {
+            "action": "update_and_notify",
+            "meeting_time": "15:30",
+            "new_location": "Room 405"
+          }
+        },
+        "L3": {
+          "instruction": "Our afternoon meeting room changed—update the calendar and tell people about it.",
+          "clarity": "intent_level",
+          "missing": [
+            "app_names",
+            "meeting_time",
+            "meeting_title",
+            "new_location",
+            "old_location"
+          ],
+          "intent": "update_meeting_location_and_notify",
+          "parameters": {
+            "action": "handle_meeting_location_change"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "cross_app_calendar_sms",
+        "method": "check_meeting_update_and_notifications",
+        "expected_state": {
+          "meeting_hour": 15,
+          "meeting_minute": 30,
+          "meeting_title": "Weekly Standup",
+          "old_location": "Room 302",
+          "new_location": "Room 405",
+          "attendees": [
+            {
+              "name": "Sarah Johnson",
+              "number": "5551235001"
+            },
+            {
+              "name": "Michael Chen",
+              "number": "5551235002"
+            },
+            {
+              "name": "Lisa Wang",
+              "number": "5551235003"
+            }
+          ],
+          "distractor_contacts": [
+            {
+              "name": "Tom Anderson",
+              "number": "5551235004"
+            },
+            {
+              "name": "Nancy Liu",
+              "number": "5551235005"
+            }
+          ],
+          "other_meetings": [
+            {
+              "title": "Project Review",
+              "hour": 10,
+              "minute": 0,
+              "location": "Room 201"
+            },
+            {
+              "title": "Client Call",
+              "hour": 17,
+              "minute": 0,
+              "location": "Conference Room B"
+            }
+          ],
+          "required_keywords": [
+            "Room 405",
+            "15:30",
+            "location"
+          ],
+          "all_attendees_notified": true,
+          "no_distractor_notified": false,
+          "location_updated": true
+        },
+        "androidworld_reference": "LayeredCrossAppMeetingUpdateNotify"
+      }
+    },
+    {
+      "task_id": 42,
+      "app": "Shopping+ProExpense",
+      "category": "cross_app_shopping_expense",
+      "name": "BuyPhoneAndRecordExpense",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, find the \"Samsung Galaxy A20, 32GB, Black\" and buy it. Then open Pro Expense app and record this purchase, category Others, note \"New phone\".",
+          "clarity": "precise",
+          "parameters": {
+            "apps": [
+              "Shopping",
+              "Pro Expense"
+            ],
+            "action": "buy_and_record",
+            "product_name": "Samsung Galaxy A20, 32GB, Black",
+            "amount": 143.0,
+            "category": "Others",
+            "note": "New phone"
+          }
+        },
+        "L1": {
+          "instruction": "Buy a Samsung Galaxy A20 (32GB, Black) and record the expense ($143, Others category).",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "app_names",
+            "exact_product_name"
+          ],
+          "parameters": {
+            "action": "buy_and_record",
+            "product_type": "Samsung Galaxy A20 32GB Black",
+            "amount": 143.0,
+            "category": "Others"
+          }
+        },
+        "L2": {
+          "instruction": "Buy a Samsung Galaxy A20 and log the expense in Others category.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "app_names",
+            "storage_size",
+            "color",
+            "exact_amount"
+          ],
+          "parameters": {
+            "action": "buy_and_record",
+            "product_type": "Samsung Galaxy A20",
+            "category": "Others"
+          }
+        },
+        "L3": {
+          "instruction": "I want to buy a new Samsung phone and keep track of this spending.",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "app_names",
+            "specific_model",
+            "storage_size",
+            "color",
+            "amount",
+            "expense_category"
+          ],
+          "intent": "buy_phone_and_track_expense",
+          "parameters": {
+            "brand": "Samsung",
+            "purpose": "track_spending"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "cross_app_shopping_expense",
+        "method": "check_order_and_expense_record",
+        "expected_state": {
+          "product_keywords": [
+            "Samsung",
+            "Galaxy",
+            "143"
+          ],
+          "expense_keywords": [
+            "Samsung Galaxy",
+            "143"
+          ],
+          "expense_category": "Others"
+        },
+        "webarena_task_id": 42,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredCrossAppShoppingExpense"
+      }
+    },
+    {
+      "task_id": 43,
+      "app": "Shopping",
+      "category": "shopping_address_and_order",
+      "name": "UpdateAddressAndBuyCereal",
+      "levels": {
+        "L0": {
+          "instruction": "On this site, change my shipping address to 231 Willow Way, Suite 100, Chicago, IL, 60601. Then find \"General Mills Sugar Cookie Toast Crunch\" cereal, add one bag to cart and complete the purchase.",
+          "clarity": "precise",
+          "parameters": {
+            "app": "Shopping",
+            "actions": [
+              "update_address",
+              "buy_product"
+            ],
+            "address_street": "231 Willow Way",
+            "address_suite": "Suite 100",
+            "address_city": "Chicago",
+            "address_state": "IL",
+            "address_zip": "60601",
+            "product_name": "General Mills Sugar Cookie Toast Crunch",
+            "product_type": "cereal",
+            "quantity": 1
+          }
+        },
+        "L1": {
+          "instruction": "Update my address to 231 Willow Way, Suite 100, Chicago, IL, 60601, then buy one bag of Sugar Cookie Toast Crunch cereal.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "site_context",
+            "exact_product_brand",
+            "checkout_confirmation"
+          ],
+          "parameters": {
+            "actions": [
+              "update_address",
+              "buy_product"
+            ],
+            "address": "231 Willow Way, Suite 100, Chicago, IL, 60601",
+            "product_keywords": [
+              "Sugar Cookie",
+              "Toast Crunch",
+              "cereal"
+            ],
+            "quantity": 1
+          }
+        },
+        "L2": {
+          "instruction": "Change my address to 231 Willow Way, Suite 100, Chicago IL, then buy some Sugar Cookie cereal.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "site_context",
+            "exact_address_format",
+            "exact_product_name",
+            "quantity",
+            "checkout_steps"
+          ],
+          "parameters": {
+            "actions": [
+              "update_address",
+              "buy_product"
+            ],
+            "address_partial": "231 Willow Way, Suite 100, Chicago",
+            "product_keywords": [
+              "Sugar Cookie",
+              "cereal"
+            ]
+          }
+        },
+        "L3": {
+          "instruction": "I moved to a new place in Chicago, update my info. Also I want to order some breakfast cereal.",
+          "clarity": "intent_level",
+          "missing": [
+            "site_context",
+            "complete_address",
+            "specific_product",
+            "quantity",
+            "all_execution_details"
+          ],
+          "intent": "update_address_and_buy_food",
+          "parameters": {
+            "location_hint": "Chicago",
+            "product_category": "breakfast cereal"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_address_and_order",
+        "method": "check_address_and_order",
+        "expected_state": {
+          "address_keywords": [
+            "231 Willow Way",
+            "Suite 100",
+            "Chicago",
+            "60601"
+          ],
+          "product_keywords": [
+            "Cookie",
+            "Crunch"
+          ]
+        },
+        "webarena_task_id": 43,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingAddressAndOrder"
+      }
+    },
+    {
+      "task_id": 44,
+      "app": "OpenTracks+Markor",
+      "category": "cross_app_sports_summary",
+      "name": "SportsWeeklySummary",
+      "levels": {
+        "L0": {
+          "instruction": "Open OpenTracks and check what sports activities I did this week. For each activity type, calculate the total duration. Then open Markor, create a file named 'sports_summary.md', and write a summary including: what sports I did this week and the total duration for each sport type.",
+          "clarity": "precise",
+          "parameters": {
+            "apps": [
+              "OpenTracks",
+              "Markor"
+            ],
+            "actions": [
+              "check_activities",
+              "create_summary"
+            ],
+            "file_name": "sports_summary.md",
+            "summary_includes": [
+              "sport_types",
+              "total_durations"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Check my weekly sports activities and durations in OpenTracks, then create a summary file 'sports_summary.md' in Markor with the sport types and total times.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "explicit_app_names",
+            "detailed_summary_format"
+          ],
+          "parameters": {
+            "actions": [
+              "check_activities",
+              "create_summary"
+            ],
+            "file_name": "sports_summary.md",
+            "time_period": "this_week"
+          }
+        },
+        "L2": {
+          "instruction": "Review my weekly exercise data and create a summary document with activity types and durations.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "app_names",
+            "file_name",
+            "file_location",
+            "exact_format"
+          ],
+          "parameters": {
+            "actions": [
+              "review_exercise",
+              "create_summary"
+            ],
+            "time_period": "weekly"
+          }
+        },
+        "L3": {
+          "instruction": "I want to know what workouts I did recently and keep a record of it.",
+          "clarity": "intent_level",
+          "missing": [
+            "apps",
+            "time_period",
+            "file_name",
+            "summary_content",
+            "all_execution_details"
+          ],
+          "intent": "track_workout_history",
+          "parameters": {
+            "goal": "track_and_record_workouts"
+          }
+        }
+      },
+      "ground_truth": "L0",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "cross_app_sports_summary",
+        "method": "check_markor_file_with_sports_data",
+        "expected_state": {
+          "file_name": "sports_summary.md",
+          "required_sports": [
+            "running",
+            "cycling",
+            "hiking"
+          ],
+          "required_fields": [
+            "sport_type",
+            "duration"
+          ]
+        },
+        "androidworld_reference": "LayeredCrossAppSportsSummary"
+      }
+    },
+    {
+      "task_id": 45,
+      "app": "Shopping",
+      "category": "shopping_retrieval_orders",
+      "name": "OrdersLastMonth",
+      "levels": {
+        "L0": {
+          "instruction": "Today is 6/12/2023. On this shopping website, check my account and tell me: how many fulfilled orders I have over the past month, and the total amount of money I spent. Format your answer as: 'X orders, $Y total spend'.",
+          "clarity": "precise",
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past month",
+            "metrics": [
+              "fulfilled_order_count",
+              "total_spend"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Today is 6/12/2023. Tell me how many fulfilled orders I have over the past month and the total amount spent.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "answer_format"
+          ],
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past month"
+          }
+        },
+        "L2": {
+          "instruction": "Check my fulfilled orders for the last month and total spending.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "current_date",
+            "website",
+            "exact_format"
+          ],
+          "parameters": {
+            "time_period": "last month"
+          }
+        },
+        "L3": {
+          "instruction": "I want to know about my recent shopping activity.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "specific_metrics",
+            "all_details"
+          ],
+          "intent": "check_recent_shopping_history"
+        }
+      },
+      "ground_truth": "0 orders, $0 total spend",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "0 order, $0 total spend",
+            "0 orders, $0 total spend",
+            "0 order, 0 dollar",
+            "no orders, no spending"
+          ]
+        },
+        "webarena_task_id": 45,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 46,
+      "app": "Shopping",
+      "category": "shopping_retrieval_orders",
+      "name": "OrdersLastWeek",
+      "levels": {
+        "L0": {
+          "instruction": "Today is 6/12/2023. On this shopping website, check my account and tell me: how many fulfilled orders I have over the past week, and the total amount of money I spent. Format your answer as: 'X orders, $Y total spend'.",
+          "clarity": "precise",
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past week",
+            "metrics": [
+              "fulfilled_order_count",
+              "total_spend"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Today is 6/12/2023. Tell me how many fulfilled orders I have over the past week and the total amount spent.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "answer_format"
+          ],
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past week"
+          }
+        },
+        "L2": {
+          "instruction": "Check my fulfilled orders for the last week and total spending.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "current_date",
+            "website",
+            "exact_format"
+          ],
+          "parameters": {
+            "time_period": "last week"
+          }
+        },
+        "L3": {
+          "instruction": "I want to know about my shopping this week.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "specific_metrics",
+            "all_details"
+          ],
+          "intent": "check_weekly_shopping"
+        }
+      },
+      "ground_truth": "0 orders, $0 total spend",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "0 order, $0 total spend",
+            "0 orders, $0 total spend",
+            "0 order, 0 dollar",
+            "no orders, no spending"
+          ]
+        },
+        "webarena_task_id": 46,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 47,
+      "app": "Shopping",
+      "category": "shopping_retrieval_orders",
+      "name": "OrdersFourMonths",
+      "levels": {
+        "L0": {
+          "instruction": "Today is 6/12/2023. On this shopping website, check my account and tell me: how many fulfilled orders I have over the past four months, and the total amount of money I spent. Format your answer as: 'X orders, $Y total spend'.",
+          "clarity": "precise",
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past four months",
+            "metrics": [
+              "fulfilled_order_count",
+              "total_spend"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Today is 6/12/2023. Tell me how many fulfilled orders I have over the past four months and the total amount spent.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "answer_format"
+          ],
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past four months"
+          }
+        },
+        "L2": {
+          "instruction": "Check my fulfilled orders for the last four months and total spending.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "current_date",
+            "website",
+            "exact_format"
+          ],
+          "parameters": {
+            "time_period": "four months"
+          }
+        },
+        "L3": {
+          "instruction": "I want to know about my shopping over the past few months.",
+          "clarity": "intent_level",
+          "missing": [
+            "exact_time_period",
+            "specific_metrics",
+            "all_details"
+          ],
+          "intent": "check_multi_month_shopping"
+        }
+      },
+      "ground_truth": "3 orders, $845.49 total spend",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "3 orders, $845.49 total spend",
+            "3 order, 845.49 dollar",
+            "three orders, $845.49"
+          ]
+        },
+        "webarena_task_id": 47,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 48,
+      "app": "Shopping",
+      "category": "shopping_retrieval_orders",
+      "name": "OrdersOneYear",
+      "levels": {
+        "L0": {
+          "instruction": "Today is 6/12/2023. On this shopping website, check my account and tell me: how many fulfilled orders I have over the past year, and the total amount of money I spent. Format your answer as: 'X orders, $Y total spend'.",
+          "clarity": "precise",
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past year",
+            "metrics": [
+              "fulfilled_order_count",
+              "total_spend"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Today is 6/12/2023. Tell me how many fulfilled orders I have over the past year and the total amount spent.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "answer_format"
+          ],
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past year"
+          }
+        },
+        "L2": {
+          "instruction": "Check my fulfilled orders for the last year and total spending.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "current_date",
+            "website",
+            "exact_format"
+          ],
+          "parameters": {
+            "time_period": "year"
+          }
+        },
+        "L3": {
+          "instruction": "I want to know about my yearly shopping.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "specific_metrics",
+            "all_details"
+          ],
+          "intent": "check_shopping_history"
+        }
+      },
+      "ground_truth": "24 orders, $6560.69 total spend",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "24 orders, $6560.69 total spend"
+          ]
+        },
+        "webarena_task_id": 48,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 49,
+      "app": "Shopping",
+      "category": "shopping_retrieval_orders",
+      "name": "OrdersSixMonths",
+      "levels": {
+        "L0": {
+          "instruction": "Today is 6/12/2023. On this shopping website, check my account and tell me: how many fulfilled orders I have over the past six months, and the total amount of money I spent. Format your answer as: 'X orders, $Y total spend'.",
+          "clarity": "precise",
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past six months",
+            "metrics": [
+              "fulfilled_order_count",
+              "total_spend"
+            ]
+          }
+        },
+        "L1": {
+          "instruction": "Today is 6/12/2023. Tell me how many fulfilled orders I have over the past six months and the total amount spent.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "answer_format"
+          ],
+          "parameters": {
+            "current_date": "6/12/2023",
+            "time_period": "past six months"
+          }
+        },
+        "L2": {
+          "instruction": "Check my fulfilled orders for the last six months and total spending.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "current_date",
+            "website",
+            "exact_format"
+          ],
+          "parameters": {
+            "time_period": "six months"
+          }
+        },
+        "L3": {
+          "instruction": "I want to know about my shopping over half a year.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "specific_metrics",
+            "all_details"
+          ],
+          "intent": "check_shopping_history"
+        }
+      },
+      "ground_truth": "12 orders, $1603.69 total spend",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "12 orders, $1603.69 total spend"
+          ]
+        },
+        "webarena_task_id": 49,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 50,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "FoodSpendMarch2023",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spent on food-related shopping during March 2023. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spent on food-related shopping during March 2023",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending on food-related shopping during March 2023",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "$47.41",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "$47.41"
+          ]
+        },
+        "webarena_task_id": 50,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 51,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "HairCareJan2023",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spent on hair care and hair style shopping during Jan 2023. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spent on hair care and hair style shopping during Jan 2023",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending on hair care and hair style shopping during Jan 2023",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "$95.23",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "$95.23"
+          ]
+        },
+        "webarena_task_id": 51,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 52,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "HomeDecor20230129",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spent on home decoration shopping during 1/29/2023. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spent on home decoration shopping during 1/29/2023",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending on home decoration shopping during 1/29/2023",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "$265.69",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "$265.69"
+          ]
+        },
+        "webarena_task_id": 52,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 53,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "FoodMidToEndJan2023",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spent on food shopping during from mid Jan to the end Jan 2023. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spent on food shopping during from mid Jan to the end Jan 2023",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending on food shopping during from mid Jan to the end Jan 2023",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "0",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "0"
+          ]
+        },
+        "webarena_task_id": 53,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 54,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "CookingMarch2022",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spent on cooking and food shopping during March 2022. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spent on cooking and food shopping during March 2022",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending on cooking and food shopping during March 2022",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "$52.35",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "$52.35"
+          ]
+        },
+        "webarena_task_id": 54,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 55,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "OneStopMarket20230419",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spend on 4/19/2023 on shopping at One Stop Market?. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spend on 4/19/2023 on shopping at One Stop Market?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending on 4/19/2023 on shopping at One Stop Market?",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "0",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "0"
+          ]
+        },
+        "webarena_task_id": 55,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 56,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "OneStopMarketMarch2023",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spend in March 2023 on shopping at One Stop Market?. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spend in March 2023 on shopping at One Stop Market?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending in March 2023 on shopping at One Stop Market?",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "81.31",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "81.31"
+          ]
+        },
+        "webarena_task_id": 56,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 57,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "OneStopMarketJuly2022",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spend in July 2022 on shopping at One Stop Market?. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spend in July 2022 on shopping at One Stop Market?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending in July 2022 on shopping at One Stop Market?",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "40.16",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "40.16"
+          ]
+        },
+        "webarena_task_id": 57,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 58,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "OneStopMarketJanToMarch2023",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spend each month from Jan to the end of March 2023 on shopping at One Stop Market?. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spend each month from Jan to the end of March 2023 on shopping at One Stop Market?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending each month from Jan to the end of March 2023 on shopping at One Stop Market?",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "Jan: 572.8\\nFeb: 762.18\\nMar: 83.31",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "Jan: 572.8\\nFeb: 762.18\\nMar: 83.31"
+          ]
+        },
+        "webarena_task_id": 58,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 59,
+      "app": "Shopping",
+      "category": "shopping_retrieval_spending",
+      "name": "OneStopMarketJanToMarch2023_v2",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, check my order history and answer: How much I spend each month from Jan to the end of March 2023 on shopping at One Stop Market?. Provide the answer as a specific dollar amount or '0' if none.",
+          "clarity": "precise",
+          "parameters": {
+            "question_type": "spending_query"
+          }
+        },
+        "L1": {
+          "instruction": "How much I spend each month from Jan to the end of March 2023 on shopping at One Stop Market?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context"
+          ],
+          "parameters": {}
+        },
+        "L2": {
+          "instruction": "How much my spending each month from Jan to the end of March 2023 on shopping at One Stop Market?",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_timeframe"
+          ],
+          "parameters": {}
+        },
+        "L3": {
+          "instruction": "I want to know about my spending history.",
+          "clarity": "intent_level",
+          "missing": [
+            "time_period",
+            "category",
+            "all_details"
+          ],
+          "intent": "check_spending"
+        }
+      },
+      "ground_truth": "Jan: 572.8\\nFeb: 762.18\\nMar: 83.31",
+      "requires_answer": true,
+      "evaluation": {
+        "type": "shopping_string_match",
+        "method": "string_match",
+        "eval_types": [
+          "string_match"
+        ],
+        "reference_answers": {
+          "fuzzy_match": [
+            "Jan: 572.8\\nFeb: 762.18\\nMar: 83.31"
+          ]
+        },
+        "webarena_task_id": 59,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": false,
+        "androidworld_reference": "LayeredShoppingStringMatch"
+      }
+    },
+    {
+      "task_id": 60,
+      "app": "Shopping",
+      "category": "shopping_reorder",
+      "name": "ReorderMattressFoundation",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, find the order I previously placed for a mattress foundation around Feb or March 2023, which was later cancelled. Reorder the same product by adding it to cart and completing the purchase.",
+          "clarity": "precise",
+          "parameters": {
+            "product": "mattress foundation",
+            "time_period": "around Feb or March 2023",
+            "action": "reorder_cancelled",
+            "expected_sku": "B07DFJ5XKH"
+          }
+        },
+        "L1": {
+          "instruction": "I previously ordered a mattress foundation around Feb or March 2023 and later cancelled. Can you reorder it for me?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "detailed_steps"
+          ],
+          "parameters": {
+            "product": "mattress foundation",
+            "time_period": "around Feb or March 2023",
+            "action": "reorder"
+          }
+        },
+        "L2": {
+          "instruction": "Reorder the mattress foundation I cancelled before.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "time_period",
+            "exact_product"
+          ],
+          "parameters": {
+            "product_type": "mattress foundation",
+            "action": "reorder"
+          }
+        },
+        "L3": {
+          "instruction": "I want to buy that mattress foundation again.",
+          "clarity": "intent_level",
+          "missing": [
+            "website",
+            "which_order",
+            "how_to_find",
+            "all_details"
+          ],
+          "intent": "repurchase_previous_item",
+          "parameters": {
+            "product_hint": "mattress foundation"
+          }
+        }
+      },
+      "ground_truth": "Order placed with SKU B07DFJ5XKH",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_reorder",
+        "method": "check_order_contains_sku",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "func:shopping_get_latest_order_url()",
+            "locator": "document.querySelector('.order-details-items.ordered').outerText",
+            "required_contents": {
+              "must_include": [
+                "B07DFJ5XKH"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "product_sku": "B07DFJ5XKH"
+        },
+        "webarena_task_id": 60,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingReorder"
+      }
+    },
+    {
+      "task_id": 61,
+      "app": "Shopping",
+      "category": "shopping_reorder",
+      "name": "ReorderTableLamp",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, find the order I previously placed for a table lamp in May 2023, which was later cancelled. Reorder the same product by adding it to cart and completing the purchase.",
+          "clarity": "precise",
+          "parameters": {
+            "product": "table lamp",
+            "time_period": "in May 2023",
+            "action": "reorder_cancelled",
+            "expected_sku": "B072XS3F6W"
+          }
+        },
+        "L1": {
+          "instruction": "I previously ordered a table lamp in May 2023 and later cancelled. Can you reorder it for me?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "detailed_steps"
+          ],
+          "parameters": {
+            "product": "table lamp",
+            "time_period": "in May 2023",
+            "action": "reorder"
+          }
+        },
+        "L2": {
+          "instruction": "Reorder the table lamp I cancelled before.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "time_period",
+            "exact_product"
+          ],
+          "parameters": {
+            "product_type": "table lamp",
+            "action": "reorder"
+          }
+        },
+        "L3": {
+          "instruction": "I want to buy that table lamp again.",
+          "clarity": "intent_level",
+          "missing": [
+            "website",
+            "which_order",
+            "how_to_find",
+            "all_details"
+          ],
+          "intent": "repurchase_previous_item",
+          "parameters": {
+            "product_hint": "table lamp"
+          }
+        }
+      },
+      "ground_truth": "Order placed with SKU B072XS3F6W",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_reorder",
+        "method": "check_order_contains_sku",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "func:shopping_get_latest_order_url()",
+            "locator": "document.querySelector('.order-details-items.ordered').outerText",
+            "required_contents": {
+              "must_include": [
+                "B072XS3F6W"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "product_sku": "B072XS3F6W"
+        },
+        "webarena_task_id": 61,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingReorder"
+      }
+    },
+    {
+      "task_id": 62,
+      "app": "Shopping",
+      "category": "shopping_reorder",
+      "name": "ReorderTVStand",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, find the order I previously placed for a TV stand sometime around sep 2022, which was later cancelled. Reorder the same product by adding it to cart and completing the purchase.",
+          "clarity": "precise",
+          "parameters": {
+            "product": "TV stand",
+            "time_period": "sometime around sep 2022",
+            "action": "reorder_cancelled",
+            "expected_sku": "B08PVHRRB7"
+          }
+        },
+        "L1": {
+          "instruction": "I previously ordered a TV stand sometime around sep 2022 and later cancelled. Can you reorder it for me?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "detailed_steps"
+          ],
+          "parameters": {
+            "product": "TV stand",
+            "time_period": "sometime around sep 2022",
+            "action": "reorder"
+          }
+        },
+        "L2": {
+          "instruction": "Reorder the TV stand I cancelled before.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "time_period",
+            "exact_product"
+          ],
+          "parameters": {
+            "product_type": "TV stand",
+            "action": "reorder"
+          }
+        },
+        "L3": {
+          "instruction": "I want to buy that TV stand again.",
+          "clarity": "intent_level",
+          "missing": [
+            "website",
+            "which_order",
+            "how_to_find",
+            "all_details"
+          ],
+          "intent": "repurchase_previous_item",
+          "parameters": {
+            "product_hint": "TV stand"
+          }
+        }
+      },
+      "ground_truth": "Order placed with SKU B08PVHRRB7",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_reorder",
+        "method": "check_order_contains_sku",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "func:shopping_get_latest_order_url()",
+            "locator": "document.querySelector('.order-details-items.ordered').outerText",
+            "required_contents": {
+              "must_include": [
+                "B08PVHRRB7"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "product_sku": "B08PVHRRB7"
+        },
+        "webarena_task_id": 62,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingReorder"
+      }
+    },
+    {
+      "task_id": 63,
+      "app": "Shopping",
+      "category": "shopping_reorder",
+      "name": "ReorderCatTShirt",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, find the order I previously placed for a cat t-shirt during 2022, which was later cancelled. Reorder the same product by adding it to cart and completing the purchase.",
+          "clarity": "precise",
+          "parameters": {
+            "product": "cat t-shirt",
+            "time_period": "during 2022",
+            "action": "reorder_cancelled",
+            "expected_sku": "B0844BWS76"
+          }
+        },
+        "L1": {
+          "instruction": "I previously ordered a cat t-shirt during 2022 and later cancelled. Can you reorder it for me?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "detailed_steps"
+          ],
+          "parameters": {
+            "product": "cat t-shirt",
+            "time_period": "during 2022",
+            "action": "reorder"
+          }
+        },
+        "L2": {
+          "instruction": "Reorder the cat t-shirt I cancelled before.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "time_period",
+            "exact_product"
+          ],
+          "parameters": {
+            "product_type": "cat t-shirt",
+            "action": "reorder"
+          }
+        },
+        "L3": {
+          "instruction": "I want to buy that cat t-shirt again.",
+          "clarity": "intent_level",
+          "missing": [
+            "website",
+            "which_order",
+            "how_to_find",
+            "all_details"
+          ],
+          "intent": "repurchase_previous_item",
+          "parameters": {
+            "product_hint": "cat t-shirt"
+          }
+        }
+      },
+      "ground_truth": "Order placed with SKU B0844BWS76",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_reorder",
+        "method": "check_order_contains_sku",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "func:shopping_get_latest_order_url()",
+            "locator": "document.querySelector('.order-details-items.ordered').outerText",
+            "required_contents": {
+              "must_include": [
+                "B0844BWS76"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "product_sku": "B0844BWS76"
+        },
+        "webarena_task_id": 63,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingReorder"
+      }
+    },
+    {
+      "task_id": 64,
+      "app": "Shopping",
+      "category": "shopping_reorder",
+      "name": "ReorderMakeupKit",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, find the order I previously placed for a make up removal kit during summer 2022, which was later cancelled. Reorder the same product by adding it to cart and completing the purchase.",
+          "clarity": "precise",
+          "parameters": {
+            "product": "make up removal kit",
+            "time_period": "during summer 2022",
+            "action": "reorder_cancelled",
+            "expected_sku": "B0738JQG6Q"
+          }
+        },
+        "L1": {
+          "instruction": "I previously ordered a make up removal kit during summer 2022 and later cancelled. Can you reorder it for me?",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "detailed_steps"
+          ],
+          "parameters": {
+            "product": "make up removal kit",
+            "time_period": "during summer 2022",
+            "action": "reorder"
+          }
+        },
+        "L2": {
+          "instruction": "Reorder the make up removal kit I cancelled before.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "time_period",
+            "exact_product"
+          ],
+          "parameters": {
+            "product_type": "make up removal kit",
+            "action": "reorder"
+          }
+        },
+        "L3": {
+          "instruction": "I want to buy that make up removal kit again.",
+          "clarity": "intent_level",
+          "missing": [
+            "website",
+            "which_order",
+            "how_to_find",
+            "all_details"
+          ],
+          "intent": "repurchase_previous_item",
+          "parameters": {
+            "product_hint": "make up removal kit"
+          }
+        }
+      },
+      "ground_truth": "Order placed with SKU B0738JQG6Q",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_reorder",
+        "method": "check_order_contains_sku",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "func:shopping_get_latest_order_url()",
+            "locator": "document.querySelector('.order-details-items.ordered').outerText",
+            "required_contents": {
+              "must_include": [
+                "B0738JQG6Q"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "product_sku": "B0738JQG6Q"
+        },
+        "webarena_task_id": 64,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingReorder"
+      }
+    },
+    {
+      "task_id": 65,
+      "app": "Shopping",
+      "category": "shopping_constrained_purchase",
+      "name": "BuyTopRatedMeatSubstitute",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, browse the meat substitute category and find the highest rated product with a price between $100 and $200. Add it to your cart and complete the purchase by placing an order.",
+          "clarity": "precise",
+          "parameters": {
+            "category": "meat substitute",
+            "constraint_type": "rating",
+            "constraint_value": "highest",
+            "price_min": 100,
+            "price_max": 200,
+            "action": "add_to_cart_and_purchase",
+            "expected_sku": "B01CTR3DLE"
+          }
+        },
+        "L1": {
+          "instruction": "Buy the highest rated product from the meat substitute category within a budget between 100 and 200.",
+          "clarity": "environment_disambiguated",
+          "missing": [
+            "website_context",
+            "currency",
+            "detailed_steps"
+          ],
+          "parameters": {
+            "category": "meat substitute",
+            "constraint": "highest rated",
+            "price_range": "100-200"
+          }
+        },
+        "L2": {
+          "instruction": "Get the top rated meat substitute product, price around 100-200.",
+          "clarity": "parameter_underspecified",
+          "missing": [
+            "website",
+            "exact_price_range",
+            "purchase_confirmation"
+          ],
+          "parameters": {
+            "category": "meat substitute",
+            "quality": "top rated",
+            "price_hint": "100-200"
+          }
+        },
+        "L3": {
+          "instruction": "I need a good meat substitute, not too expensive.",
+          "clarity": "intent_level",
+          "missing": [
+            "website",
+            "rating_requirement",
+            "exact_budget",
+            "purchase_steps"
+          ],
+          "intent": "buy_quality_meat_substitute",
+          "parameters": {
+            "product_category": "meat substitute",
+            "quality_hint": "good",
+            "budget_hint": "not too expensive"
+          }
+        }
+      },
+      "ground_truth": "Order placed with highest rated meat substitute (B01CTR3DLE) within budget",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_constrained_purchase",
+        "method": "check_order_contains_sku",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "func:shopping_get_latest_order_url()",
+            "locator": "document.querySelector('.order-details-items.ordered').outerText",
+            "required_contents": {
+              "must_include": [
+                "B01CTR3DLE"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "product_sku": "B01CTR3DLE",
+          "category": "meat substitute",
+          "constraints": {
+            "rating": "highest",
+            "price_min": 100,
+            "price_max": 200
+          }
+        },
+        "webarena_task_id": 65,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingConstrainedPurchase"
+      }
+    },
+    {
+      "task_id": 66,
+      "name": "SubscribeNewsletter",
+      "app": "Shopping",
+      "category": "shopping_newsletter",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, subscribe to the newsletter of OneStopMarket. My email address is: emma.lopez@gmail.com",
+          "clarity": "precise",
+          "missing": [],
+          "intent": "subscribe_to_newsletter",
+          "parameters": {
+            "website": "OneStopMarket",
+            "action": "subscribe",
+            "email": "emma.lopez@gmail.com"
+          }
+        },
+        "L1": {
+          "instruction": "Subscribe to OneStopMarket's newsletter using email emma.lopez@gmail.com",
+          "clarity": "clear",
+          "missing": [
+            "exact_page"
+          ],
+          "intent": "subscribe_to_newsletter",
+          "parameters": {
+            "website": "OneStopMarket",
+            "action": "subscribe",
+            "email": "emma.lopez@gmail.com"
+          }
+        },
+        "L2": {
+          "instruction": "Sign up for the shopping newsletter with my email emma.lopez@gmail.com",
+          "clarity": "underspecified",
+          "missing": [
+            "website_name",
+            "exact_page"
+          ],
+          "intent": "subscribe_to_newsletter",
+          "parameters": {
+            "action": "subscribe",
+            "email": "emma.lopez@gmail.com"
+          }
+        },
+        "L3": {
+          "instruction": "I want to receive shopping updates via email at emma.lopez@gmail.com",
+          "clarity": "intent_level",
+          "missing": [
+            "website_name",
+            "exact_page",
+            "specific_action"
+          ],
+          "intent": "receive_shopping_updates",
+          "parameters": {
+            "email": "emma.lopez@gmail.com",
+            "preference": "receive updates"
+          }
+        }
+      },
+      "ground_truth": "Newsletter subscription enabled for email emma.lopez@gmail.com",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_newsletter",
+        "method": "check_newsletter_subscription",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "__SHOPPING__/newsletter/manage/",
+            "locator": "document.querySelector('[title=\"General Subscription\"]').checked.toString()",
+            "required_contents": {
+              "exact_match": "true"
+            }
+          }
+        ],
+        "expected_state": {
+          "email": "emma.lopez@gmail.com",
+          "subscription_status": "enabled"
+        },
+        "webarena_task_id": 66,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingNewsletter"
+      }
+    },
+    {
+      "task_id": 67,
+      "name": "DraftRefundMessage",
+      "app": "Shopping",
+      "category": "shopping_contact_us",
+      "levels": {
+        "L0": {
+          "instruction": "On this shopping website, draft a refund message via their \"contact us\" form for the phone screen protector I bought March 2023. It broke after three days of use. The shop requires the order id, the reason and the amount to refund in the message. Don't submit yet. My name is Emma Lopez, my email is: emma.lopez@gmail.com",
+          "clarity": "precise",
+          "missing": [],
+          "intent": "draft_refund_request",
+          "parameters": {
+            "action": "draft_message",
+            "form_type": "contact us",
+            "product": "phone screen protector",
+            "purchase_date": "March 2023",
+            "reason": "broke after three days of use",
+            "required_fields": [
+              "order_id",
+              "reason",
+              "refund_amount"
+            ],
+            "name": "Emma Lopez",
+            "email": "emma.lopez@gmail.com",
+            "submit": false
+          }
+        },
+        "L1": {
+          "instruction": "Draft a refund request for a phone screen protector from March 2023 that broke after 3 days. Include order ID, reason, and refund amount. Use the contact form. Name: Emma Lopez, Email: emma.lopez@gmail.com. Don't submit.",
+          "clarity": "clear",
+          "missing": [
+            "exact_order_id",
+            "exact_amount"
+          ],
+          "intent": "draft_refund_request",
+          "parameters": {
+            "action": "draft_message",
+            "product": "phone screen protector",
+            "purchase_date": "March 2023",
+            "reason": "broke after 3 days",
+            "name": "Emma Lopez",
+            "email": "emma.lopez@gmail.com",
+            "submit": false
+          }
+        },
+        "L2": {
+          "instruction": "Write a refund message for a screen protector that broke quickly. I bought it in March. Name: Emma Lopez, Email: emma.lopez@gmail.com. Don't send it yet.",
+          "clarity": "underspecified",
+          "missing": [
+            "exact_form_location",
+            "order_id",
+            "exact_amount",
+            "specific_reason"
+          ],
+          "intent": "draft_refund_request",
+          "parameters": {
+            "product": "screen protector",
+            "issue": "broke quickly",
+            "purchase_time": "March",
+            "name": "Emma Lopez",
+            "email": "emma.lopez@gmail.com",
+            "submit": false
+          }
+        },
+        "L3": {
+          "instruction": "I need to request a refund for something I bought that broke. Name: Emma Lopez, Email: emma.lopez@gmail.com",
+          "clarity": "intent_level",
+          "missing": [
+            "product",
+            "purchase_date",
+            "exact_reason",
+            "form_location",
+            "order_id",
+            "amount"
+          ],
+          "intent": "request_refund",
+          "parameters": {
+            "issue": "product broke",
+            "name": "Emma Lopez",
+            "email": "emma.lopez@gmail.com"
+          }
+        }
+      },
+      "ground_truth": "Refund message drafted with order ID 000000180, reason, and amount $12.99",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_contact_us",
+        "method": "check_contact_form_content",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "last",
+            "locator": "document.querySelector('[title=\"What's on your mind?\"]').value",
+            "required_contents": {
+              "must_include": [
+                "refund",
+                "it broke after three days of use",
+                "000000180",
+                "12.99"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "form_type": "contact_us",
+          "order_id": "000000180",
+          "reason": "it broke after three days of use",
+          "refund_amount": "12.99",
+          "name": "Emma Lopez",
+          "email": "emma.lopez@gmail.com",
+          "submitted": false
+        },
+        "webarena_task_id": 67,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingContactUs"
+      }
+    },
+    {
+      "task_id": 68,
+      "name": "UpdateShippingAddress",
+      "app": "Shopping",
+      "category": "shopping_update_address",
+      "levels": {
+        "L0": {
+          "instruction": "I recently moved to a new address: 231 Willow Way, Suite 100, Chicago, IL, 60601. Please update my information on OneStopShopping accordingly.",
+          "clarity": "precise",
+          "missing": [],
+          "intent": "update_address",
+          "parameters": {
+            "website": "OneStopShopping",
+            "action": "update_address",
+            "street": "231 Willow Way",
+            "suite": "Suite 100",
+            "city": "Chicago",
+            "state": "IL",
+            "zipcode": "60601"
+          }
+        },
+        "L1": {
+          "instruction": "Update my shipping address to 231 Willow Way, Suite 100, Chicago, IL, 60601 on the shopping website.",
+          "clarity": "clear",
+          "missing": [
+            "exact_website_name"
+          ],
+          "intent": "update_address",
+          "parameters": {
+            "action": "update_address",
+            "street": "231 Willow Way",
+            "suite": "Suite 100",
+            "city": "Chicago",
+            "state": "IL",
+            "zipcode": "60601"
+          }
+        },
+        "L2": {
+          "instruction": "Change my address to 231 Willow Way, Suite 100, Chicago, IL, 60601.",
+          "clarity": "underspecified",
+          "missing": [
+            "website",
+            "exact_page"
+          ],
+          "intent": "update_address",
+          "parameters": {
+            "street": "231 Willow Way",
+            "suite": "Suite 100",
+            "city": "Chicago",
+            "state": "IL",
+            "zipcode": "60601"
+          }
+        },
+        "L3": {
+          "instruction": "I moved to a new place in Chicago, the address is 231 Willow Way, Suite 100, 60601.",
+          "clarity": "intent_level",
+          "missing": [
+            "website",
+            "specific_action",
+            "exact_page"
+          ],
+          "intent": "update_personal_info",
+          "parameters": {
+            "event": "moved",
+            "city": "Chicago",
+            "street": "231 Willow Way",
+            "suite": "Suite 100",
+            "zipcode": "60601"
+          }
+        }
+      },
+      "ground_truth": "Address updated to 231 Willow Way, Suite 100, Chicago, IL, 60601",
+      "requires_answer": false,
+      "evaluation": {
+        "type": "shopping_update_address",
+        "method": "check_address_updated",
+        "eval_types": [
+          "program_html"
+        ],
+        "program_html": [
+          {
+            "url": "__SHOPPING__/customer/address",
+            "locator": "document.querySelector('.box.box-address-billing > .box-content').outerText",
+            "required_contents": {
+              "must_include": [
+                "231 Willow Way",
+                "Suite 100",
+                "Chicago, Illinois, 60601"
+              ]
+            }
+          }
+        ],
+        "expected_state": {
+          "street": "231 Willow Way",
+          "suite": "Suite 100",
+          "city": "Chicago",
+          "state": "Illinois",
+          "zipcode": "60601"
+        },
+        "webarena_task_id": 68,
+        "start_url": "__SHOPPING__",
+        "require_login": true,
+        "require_reset": true,
+        "androidworld_reference": "LayeredShoppingUpdateAddress"
+      }
+    }
+  ]
+}

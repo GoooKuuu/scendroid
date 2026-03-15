@@ -1,0 +1,39 @@
+# ScenDroid - Python Dependencies
+# Install with: pip install -r requirements.txt
+# Requires: Python >= 3.11
+
+# Core framework
+absl-py>=2.1.0
+android_env>=1.2.3
+dm_env>=1.6
+grpcio-tools
+immutabledict>=2.0.0
+
+# Agent dependencies
+openai>=1.0.0
+Pillow>=10.0.0
+torch>=2.0.0
+transformers>=4.40.0
+
+# Evaluation & utilities
+fuzzywuzzy>=0.18.0
+python-Levenshtein
+jsonschema>=4.17.3
+numpy>=1.26.3
+pandas>=2.1.4
+opencv-python
+matplotlib>=3.6.1
+requests
+tenacity
+termcolor
+
+# TUI & server
+fastapi
+uvicorn
+IPython
+
+# Audio processing (for audio recorder tasks)
+pydub
+
+# Testing
+pytest

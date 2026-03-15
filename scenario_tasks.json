@@ -1,0 +1,447 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "A",
+      "name": "Wake-up → Work Kickoff",
+      "description": "Simulate a weekday morning where user wakes up late and needs to adjust schedule and prepare for an important meeting",
+      "tags": ["morning", "work", "calendar", "clock"],
+      "total_max_steps": 50,
+      "subtasks": [
+        {
+          "subtask_id": 1,
+          "name": "Adjust Wake-up Time",
+          "app": "Clock",
+          "type": "execution",
+          "max_steps": 20,
+          "narration": "07:15 AM - You wake up to your alarm feeling tired, but you have an important sync meeting this morning",
+          "user_instruction": "I want to sleep in a bit more without affecting my work schedule. Please adjust my weekday alarm 15 minutes later",
+          "clarity_level": "L2",
+          "environment_setup": {
+            "method": "use_existing_alarm_or_create",
+            "description": "Ensure Weekday alarm exists at 07:15",
+            "alarm_time_hour": 7,
+            "alarm_time_minute": 15,
+            "alarm_enabled": true,
+            "alarm_label": "Weekday",
+            "alarm_days": "weekdays"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredClockSetAlarm",
+            "params": {
+              "alarm_time_hour": 7,
+              "alarm_time_minute": 30,
+              "day_offset": 0,
+              "alarm_enabled": true,
+              "check_original_removed": true,
+              "original_hour": 7,
+              "original_minute": 15
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 300
+          }
+        },
+        {
+          "subtask_id": 2,
+          "name": "Create Project Sync Meeting",
+          "app": "Calendar",
+          "type": "execution",
+          "max_steps": 30,
+          "narration": "07:40 AM - You decide to schedule a sync meeting",
+          "user_instruction": "Create a Project Sync meeting from 09:30 to 10:00, location is Conference Room, note that Alice and Bob will attend",
+          "clarity_level": "L2",
+          "environment_setup": {
+            "method": "add_distractor_events",
+            "description": "Add some existing calendar events as distractors",
+            "distractor_events": [
+              {"title": "Team Standup", "hour": 9, "minute": 0, "duration_minutes": 15},
+              {"title": "Lunch with Sarah", "hour": 12, "minute": 0, "duration_minutes": 60},
+              {"title": "Code Review", "hour": 14, "minute": 0, "duration_minutes": 60}
+            ]
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredCalendarCreateMeeting",
+            "params": {
+              "title": "Project Sync Meeting",
+              "hour": 9,
+              "minute": 30,
+              "day_offset": 0,
+              "location": "Conference Room",
+              "duration_mins": 30,
+              "description_keywords": ["Alice", "Bob"]
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 300
+          }
+        }
+      ],
+      "scenario_evaluation": {
+        "method": "subtask_aggregation",
+        "success_criteria": {
+          "all_subtasks_pass": false,
+          "min_subtasks_pass": 2
+        },
+        "scoring": {
+          "method": "weighted_average",
+          "weights": [0.4, 0.6]
+        }
+      }
+    },
+    {
+      "scenario_id": "B",
+      "name": "Busy Monday for David",
+      "description": "Simulate a busy workday for David from morning alarm adjustment to evening summary, covering schedule management, communication, shopping, and expense tracking",
+      "tags": ["workday", "multi-app", "productivity", "calendar", "shopping", "sms", "expense"],
+      "base_date": "2025-12-26",
+      "base_date_comment": "Friday, December 26, 2025 - Device time will be set to this date + subtask time for each subtask",
+      "total_max_steps": 250,
+      "subtasks": [
+        {
+          "subtask_id": 1,
+          "name": "Adjust Weekday Alarm",
+          "app": "Clock",
+          "type": "execution",
+          "max_steps": 20,
+          "time": "10:40",
+          "narration": "David almost missed work this morning and decides to set his weekday alarm 10 minutes earlier",
+          "user_instruction": "Morning, Agent, I'm David. Move my work alarm 10 minutes earlier, only change the weekday one.",
+          "clarity_level": "L2",
+          "environment_setup": {
+            "method": "initialize_multiple_alarms",
+            "description": "Create 3 alarms: 10:35 weekdays ON, 17:10 weekdays ON, 22:00 daily ON",
+            "alarms": [
+              {"hour": 10, "minute": 35, "enabled": true, "label": "Work", "days": "weekdays"},
+              {"hour": 17, "minute": 10, "enabled": true, "label": "Leave Work", "days": "weekdays"},
+              {"hour": 22, "minute": 0, "enabled": true, "label": "Sleep", "days": "daily"}
+            ]
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredClockSetAlarm",
+            "params": {
+              "alarm_time_hour": 10,
+              "alarm_time_minute": 25,
+              "alarm_enabled": true,
+              "check_original_removed": true,
+              "original_hour": 10,
+              "original_minute": 35,
+              "verify_other_alarms_unchanged": true,
+              "expected_total_alarms": 3
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 300
+          }
+        },
+        {
+          "subtask_id": 2,
+          "name": "Check Morning Schedule",
+          "app": "Calendar",
+          "type": "qa",
+          "max_steps": 25,
+          "time": "11:10",
+          "narration": "Arrived at office, David wants to confirm his morning schedule",
+          "user_instruction": "Check my Simple Calendar Pro and tell me what meetings I have this morning before noon",
+          "clarity_level": "L1",
+          "requires_answer": true,
+          "environment_setup": {
+            "method": "setup_calendar_and_tasks",
+            "calendar_events": [
+              {"title": "Company Weekly Meeting", "hour": 11, "minute": 30, "duration_minutes": 60, "location": "Conference Room A", "attendees": ["David", "John", "Bob", "Nierson", "Hession"]},
+              {"title": "Client Presentation", "hour": 15, "minute": 0, "duration_minutes": 90, "location": "Meeting Room B", "attendees": ["Alice", "Tom"]}
+            ]
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredCalendarCheckMeetingAnswer",
+            "params": {
+              "must_contain_keywords": ["11:30", "meeting", "company", "weekly"],
+              "min_keywords_found": 2
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 400
+          }
+        },
+        {
+          "subtask_id": 3,
+          "name": "Extract Meeting Attendees",
+          "app": "Calendar",
+          "type": "qa",
+          "max_steps": 20,
+          "time": "11:18",
+          "narration": "David doesn't want to manually check the calendar for the attendee list",
+          "user_instruction": "Read the attendee list from the Company Weekly Meeting in Simple Calendar Pro and list them for me",
+          "clarity_level": "L1",
+          "requires_answer": true,
+          "environment_setup": {
+            "method": "use_existing_calendar",
+            "description": "Use the meeting created in subtask 2"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredCalendarExtractAttendees",
+            "params": {
+              "event_title": "Company Weekly Meeting",
+              "required_attendees": ["John", "Bob", "Nierson", "Hession"],
+              "min_attendees_found": 4,
+              "exclude_self": true
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 300
+          }
+        },
+        {
+          "subtask_id": 4,
+          "name": "Send Meeting Reminder",
+          "app": "SMS",
+          "type": "execution",
+          "max_steps": 30,
+          "time": "11:20",
+          "narration": "David wants to remind everyone about the in-person meeting location",
+          "user_instruction": "Use Simple SMS Messenger to remind them to attend the meeting (include time and location)",
+          "clarity_level": "L2",
+          "environment_setup": {
+            "method": "initialize_contacts",
+            "description": "Add meeting attendees and distractor contacts",
+            "contacts": [
+              {"name": "John Smith", "phone": "555-0101"},
+              {"name": "Bob Johnson", "phone": "555-0102"},
+              {"name": "Nierson Williams", "phone": "555-0103"},
+              {"name": "Hession Brown", "phone": "555-0104"},
+              {"name": "Alice Davis", "phone": "555-0201"},
+              {"name": "Charlie Wilson", "phone": "555-0202"}
+            ]
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredSMSBatchNotify",
+            "params": {
+              "required_recipients": ["John Smith", "Bob Johnson", "Nierson Williams", "Hession Brown"],
+              "message_must_contain_time": "11:30",
+              "message_must_contain_location": ["Conference Room A", "Room A", "Conference", "A"],
+              "forbidden_recipients": ["Alice Davis", "Charlie Wilson"],
+              "min_messages_sent": 4
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 400
+          }
+        },
+        {
+          "subtask_id": 5,
+          "name": "Prepare Meeting Outline",
+          "app": "Markor",
+          "type": "execution",
+          "max_steps": 25,
+          "time": "11:25",
+          "narration": "David wants to prepare a meeting notes template so he can fill it in during the meeting",
+          "user_instruction": "Open Markor, create a 'Weekly Meeting Notes Outline' in WorkLog.md (create this markdown file) with structured sections: Title (fill in content), Time (fill in content), Location (fill in content), Attendees (fill in content), Discussion Notes (header only)",
+          "clarity_level": "L1",
+          "environment_setup": {
+            "method": "ensure_markor_ready",
+            "description": "Ensure Markor app is accessible"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredMarkorCreateOutline",
+            "params": {
+              "file_name": "WorkLog.md",
+              "required_sections": ["Title", "Time", "Location", "Attendees", "Discussion"],
+              "sections_with_content": ["Title", "Time", "Location", "Attendees"],
+              "header_only_sections": ["Discussion"]
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 350
+          }
+        },
+        {
+          "subtask_id": 6,
+          "name": "Mark John Out of Office",
+          "app": "Calendar",
+          "type": "execution",
+          "max_steps": 25,
+          "time": "11:50",
+          "narration": "John is traveling, won't need to invite him in-person for next two weeks",
+          "user_instruction": "Open Simple Calendar Pro, find 'Company Weekly Meeting', and add a note 'John, out of office' in the description",
+          "clarity_level": "L1",
+          "environment_setup": {
+            "method": "use_existing_calendar",
+            "description": "Use the recurring meeting from subtask 2"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredCalendarEditNote",
+            "params": {
+              "event_title": "Company Weekly Meeting",
+              "note_must_contain": ["John", "out of office"],
+              "should_not_create_new_event": true
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 350
+          }
+        },
+        {
+          "subtask_id": 7,
+          "name": "Order Outdoor Table",
+          "app": "Shopping",
+          "type": "execution",
+          "max_steps": 30,
+          "time": "12:50",
+          "narration": "David sees the reminder to buy the outdoor table in Tasks",
+          "user_instruction": "Add the 'Outdoor Patio Folding Side Table green' to my cart and place an order",
+          "clarity_level": "L1",
+          "environment_setup": {
+            "method": "initialize_shopping",
+            "description": "Chrome auto-login, start at shopping homepage"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredShoppingPurchaseProduct",
+            "params": {
+              "product_sku": "B07FM3WKJ8",
+              "product_price": 49.99,
+              "check_method": "order",
+              "eval_types": ["program_html"],
+              "program_html": [
+                {
+                  "url": "func:shopping_get_latest_order_url()",
+                  "locator": "document.querySelector('.order-details-items.ordered').outerText",
+                  "required_contents": {
+                    "must_include": ["B07FM3WKJ8"]
+                  }
+                }
+              ],
+              "require_login": true,
+              "start_url": "__SHOPPING__"
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 400
+          }
+        },
+        {
+          "subtask_id": 8,
+          "name": "Record Lunch Purchase",
+          "app": "Expense",
+          "type": "execution",
+          "max_steps": 20,
+          "time": "12:40",
+          "narration": "David wants to track his daily expenses",
+          "user_instruction": "Record this lunch break purchase in expense, note it as 'Lunch purchase', use the order total as amount",
+          "clarity_level": "L2",
+          "environment_setup": {
+            "method": "clear_expenses",
+            "description": "Start with clean expense records"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredExpenseAddSingle",
+            "params": {
+              "name": "Lunch",
+              "amount": 54.99,
+              "category": "Others",
+              "date": "2025-12-26"
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 300
+          }
+        },
+        {
+          "subtask_id": 9,
+          "name": "Record Exercise Activity",
+          "app": "OpenTracks",
+          "type": "execution",
+          "max_steps": 25,
+          "time": "18:00",
+          "narration": "After work, going for a run/walk, wants to keep a record",
+          "user_instruction": "Open OpenTracks and start recording an exercise activity",
+          "clarity_level": "L1",
+          "environment_setup": {
+            "method": "ensure_permissions",
+            "description": "Ensure location permissions are granted"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredOpenTracksCreateActivity",
+            "params": {
+              "activity_date": "today",
+              "check_saved": true
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 400
+          },
+          "on_fail": "continue"
+        },
+        {
+          "subtask_id": 10,
+          "name": "Evening Summary",
+          "app": "Markor",
+          "type": "execution",
+          "max_steps": 30,
+          "time": "21:05",
+          "narration": "David wants to wrap up the day's key events",
+          "user_instruction": "Add a 'Today Summary' section at the end of WorkLog.md, write two sentences: what was today's most important meeting, and how much money I spent (according to expense records)",
+          "clarity_level": "L2",
+          "environment_setup": {
+            "method": "use_existing_file",
+            "description": "WorkLog.md already exists from subtask 5"
+          },
+          "evaluation": {
+            "androidworld_task_class": "LayeredMarkorAppendContent",
+            "params": {
+              "file_name": "WorkLog.md",
+              "section_title": "Today Summary",
+              "must_mention_meeting": true,
+              "meeting_keywords": ["meeting", "Company", "Weekly"],
+              "must_mention_expense": true,
+              "expense_amount": 54.99
+            }
+          },
+          "switch_conditions": {
+            "agent_completion": true,
+            "max_steps_reached": true,
+            "timeout_seconds": 400
+          },
+          "on_fail": "continue"
+        }
+      ],
+      "scenario_evaluation": {
+        "method": "subtask_aggregation",
+        "success_criteria": {
+          "all_subtasks_pass": false,
+          "min_subtasks_pass": 7
+        },
+        "scoring": {
+          "method": "weighted_average",
+          "weights": [0.08, 0.12, 0.08, 0.12, 0.10, 0.10, 0.12, 0.08, 0.08, 0.12]
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "created_date": "2024-12-24",
+    "description": "Scenario-level task configuration for mobile agent evaluation"
+  }
+}
+
